@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+  <head>
+    <title>Tài khoản của tôi</title>
+  </head>
+  <section>
+    <h2>Thông tin tài khoản</h2>
+    <p>Email: <span th:text="${user.email}"></span></p>
+    <p>Họ tên: <span th:text="${user.hoTen}"></span></p>
+    <p>Số điện thoại: <span th:text="${user.soDienThoai}"></span></p>
+    <h3>Đổi mật khẩu</h3>
+    <form th:action="@{/user/account/change-password}" method="post">
+      <label>Mật khẩu cũ:</label>
+      <input type="password" name="oldPassword" required />
+      <label>Mật khẩu mới:</label>
+      <input type="password" name="newPassword" required />
+      <button type="submit">Đổi mật khẩu</button>
+    </form>
+    <h3>Đơn hàng của bạn</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Mã đơn</th>
+          <th>Ngày đặt</th>
+          <th>Trạng thái</th>
+          <th>Tổng tiền</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="order : ${orders}">
+          <td th:text="${order.id}"></td>
+          <td th:text="${order.ngayDatHang}"></td>
+          <td th:text="${order.trangThai}"></td>
+          <td th:text="${order.tongTien}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</html>

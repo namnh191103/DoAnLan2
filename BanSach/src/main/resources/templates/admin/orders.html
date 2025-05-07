@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+  <head>
+    <title>Quản lý đơn hàng</title>
+  </head>
+  <section>
+    <h2>Quản lý đơn hàng</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Mã đơn</th>
+          <th>Khách hàng</th>
+          <th>Ngày đặt</th>
+          <th>Trạng thái</th>
+          <th>Tổng tiền</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="order : ${orders}">
+          <td th:text="${order.id}"></td>
+          <td th:text="${order.khachHang.hoTen}"></td>
+          <td th:text="${order.ngayDatHang}"></td>
+          <td th:text="${order.trangThai}"></td>
+          <td th:text="${order.tongTien}"></td>
+          <td>
+            <a th:href="@{'/admin/orders/confirm/' + ${order.id}}">Xác nhận</a>
+            |
+            <a th:href="@{'/admin/orders/edit/' + ${order.id}}">Sửa</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</html>

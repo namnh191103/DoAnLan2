@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+  <head>
+    <title>Trang chủ</title>
+  </head>
+  <section>
+    <h1>Danh sách sản phẩm</h1>
+    <div class="product-list">
+      <div th:each="product : ${products}" class="product-item">
+        <a th:href="@{'/user/products/' + ${product.id}}">
+          <img th:src="${product.anhBia}" alt="Ảnh bìa" />
+          <h3 th:text="${product.tuaDe}"></h3>
+          <p th:text="${product.giaBan}"></p>
+        </a>
+      </div>
+    </div>
+  </section>
+</html>
