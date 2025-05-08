@@ -1,18 +1,211 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
   <head>
     <title>Trang chủ</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", Arial, sans-serif;
+        background: #f6f8fa;
+      }
+      .main-banner {
+        background: linear-gradient(90deg, #4f8cff 0%, #6fd6ff 100%);
+        color: #fff;
+        padding: 64px 0 48px 0;
+        text-align: center;
+        border-radius: 0 0 32px 32px;
+        margin-bottom: 40px;
+        box-shadow: 0 4px 24px rgba(79, 140, 255, 0.08);
+      }
+      .main-banner h1 {
+        font-size: 2.7rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+        letter-spacing: 1px;
+      }
+      .main-banner p {
+        font-size: 1.25rem;
+      }
+      .product-section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #222;
+        margin-bottom: 18px;
+      }
+      .product-card {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+        border-radius: 18px;
+        transition: transform 0.18s, box-shadow 0.18s;
+        border: none;
+        background: #fff;
+      }
+      .product-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 8px 32px rgba(79, 140, 255, 0.13);
+      }
+      .product-img {
+        height: 210px;
+        object-fit: cover;
+        border-radius: 18px 18px 0 0;
+        background: #f2f6fc;
+      }
+      .product-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 10px 0 4px 0;
+        color: #222;
+      }
+      .product-price {
+        color: #0d6efd;
+        font-weight: 700;
+        font-size: 1.08rem;
+      }
+      .product-card .btn {
+        background: #0d6efd;
+        color: #fff;
+        border-radius: 8px;
+        font-weight: 500;
+        margin-top: 8px;
+        transition: background 0.18s;
+      }
+      .product-card .btn:hover {
+        background: #2563eb;
+      }
+      @media (max-width: 767px) {
+        .main-banner {
+          font-size: 1rem;
+          padding: 32px 0 18px 0;
+        }
+        .main-banner h1 {
+          font-size: 1.3rem;
+        }
+        .product-img {
+          height: 120px;
+        }
+      }
+      /* Footer */
+      .footer {
+        background: #222;
+        color: #fff;
+        padding: 32px 0 16px 0;
+        margin-top: 48px;
+        border-radius: 24px 24px 0 0;
+      }
+      .footer .footer-title {
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+      }
+      .footer a {
+        color: #b3d1ff;
+        text-decoration: none;
+      }
+      .footer a:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+      .footer .copyright {
+        color: #b3b3b3;
+        font-size: 0.95rem;
+        margin-top: 18px;
+      }
+    </style>
   </head>
-  <section>
-    <h1>Danh sách sản phẩm</h1>
-    <div class="product-list">
-      <div th:each="product : ${products}" class="product-item">
-        <a th:href="@{'/user/products/' + ${product.id}}">
-          <img th:src="${product.anhBia}" alt="Ảnh bìa" />
-          <h3 th:text="${product.tuaDe}"></h3>
-          <p th:text="${product.giaBan}"></p>
-        </a>
+  <body style="padding-top: 80px">
+    <div layout:fragment="content">
+      <!-- Banner lớn -->
+      <div class="main-banner position-relative">
+        <h1>Chào mừng đến với MyApp Bookstore!</h1>
+        <p>
+          Khám phá hàng ngàn đầu sách hấp dẫn, giá tốt, giao hàng nhanh chóng.
+        </p>
       </div>
+      <!-- Danh sách sản phẩm -->
+      <div class="container">
+        <div class="product-section-title">Sách nổi bật</div>
+        <div class="row g-4">
+          <div
+            th:each="product : ${products}"
+            class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch"
+          >
+            <div class="card product-card w-100 h-100">
+              <a
+                th:href="@{'/user/products/' + ${product.id}}"
+                class="text-decoration-none text-dark"
+              >
+                <img
+                  th:src="${product.anhBia}"
+                  alt="Ảnh bìa"
+                  class="card-img-top product-img"
+                />
+                <div class="card-body">
+                  <div class="product-title" th:text="${product.tuaDe}"></div>
+                  <div class="product-price" th:text="${product.giaBan}"></div>
+                  <button class="btn btn-primary btn-sm w-100 mt-2">
+                    Xem chi tiết
+                  </button>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer chuyên nghiệp -->
+      <footer class="footer mt-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-md-4 mb-3 mb-md-0">
+              <div class="footer-title">MyApp Bookstore</div>
+              <div>Địa chỉ: 123 Đường Sách, Quận 1, TP.HCM</div>
+              <div>
+                Email: <a href="mailto:support@myapp.vn">support@myapp.vn</a>
+              </div>
+              <div>Hotline: <a href="tel:0123456789">0123 456 789</a></div>
+            </div>
+            <div class="col-6 col-md-4 mb-3 mb-md-0">
+              <div class="footer-title">Liên kết nhanh</div>
+              <ul class="list-unstyled">
+                <li><a th:href="@{/}">Trang chủ</a></li>
+                <li><a th:href="@{/user/products}">Sản phẩm</a></li>
+                <li><a th:href="@{/user/cart}">Giỏ hàng</a></li>
+                <li><a th:href="@{/user/account}">Tài khoản</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-md-4">
+              <div class="footer-title">Kết nối với chúng tôi</div>
+              <a href="#" class="me-2"
+                ><img
+                  src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
+                  width="22"
+                  alt="Facebook"
+              /></a>
+              <a href="#" class="me-2"
+                ><img
+                  src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg"
+                  width="22"
+                  alt="YouTube"
+              /></a>
+              <a href="#"
+                ><img
+                  src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
+                  width="22"
+                  alt="Instagram"
+              /></a>
+            </div>
+          </div>
+          <div class="copyright text-center mt-4">
+            © 2025 MyApp Bookstore. All rights reserved.
+          </div>
+        </div>
+      </footer>
     </div>
-  </section>
+  </body>
 </html>

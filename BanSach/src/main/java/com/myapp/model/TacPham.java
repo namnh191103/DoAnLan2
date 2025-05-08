@@ -18,45 +18,60 @@ public class TacPham {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 256)
+    @Column(name = "tua_de", nullable = false, length = 256)
     private String tuaDe;
 
-    @Column(nullable = false, length = 256, unique = true)
+    @Column(name = "duong_dan", nullable = false, length = 256, unique = true)
     private String duongDan;
 
-    @Column(nullable = false, columnDefinition = "nvarchar(max)")
+    @Column(name = "tom_tat", nullable = false, columnDefinition = "nvarchar(max)")
     private String tomTat;
 
-    @Column(nullable = false, columnDefinition = "nvarchar(max)")
+    @Column(name = "noi_dung", nullable = false, columnDefinition = "nvarchar(max)")
     private String noiDung;
 
+    @Column(name = "ngay_xuat_ban")
     @Temporal(TemporalType.DATE)
     private Date ngayXuatBan;
 
+    @Column(name = "ngay_cap_nhat")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ngayCapNhat;
 
-    @Column(nullable = false)
+    @Column(name = "da_xuat_ban", nullable = false)
     private Boolean daXuatBan;
 
+    @Column(name = "so_luong_ton")
     private Integer soLuongTon;
 
+    @Column(name = "gia_nhap")
     private BigDecimal giaNhap;
 
+    @Column(name = "gia_ban")
     private BigDecimal giaBan;
 
+    @Column(name = "phan_tram_giam_gia")
     private BigDecimal phanTramGiamGia;
 
-    @Column(nullable = false, length = 256)
+    @Column(name = "anh_bia", nullable = false, length = 256)
     private String anhBia;
 
+    @Column(name = "review_count")
     private Integer reviewCount;
 
+    @Column(name = "average_rating")
     private BigDecimal averageRating;
 
+    @Column(name = "length_cm")
     private BigDecimal lengthCm;
+
+    @Column(name = "width_cm")
     private BigDecimal widthCm;
+
+    @Column(name = "height_cm")
     private BigDecimal heightCm;
+
+    @Column(name = "weight_kg")
     private BigDecimal weightKg;
 
     @OneToMany(mappedBy = "tacPham", cascade = CascadeType.ALL, orphanRemoval = true)

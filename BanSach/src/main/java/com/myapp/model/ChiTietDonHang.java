@@ -24,9 +24,9 @@ public class ChiTietDonHang {
     @JoinColumn(name = "tac_pham_id", nullable = false)
     private TacPham tacPham;
 
-    @Column(nullable = false)
+    @Column(name = "so_luong", nullable = false)
     private Integer soLuong;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "gia_ban", nullable = false, precision = 10, scale = 2)
     private BigDecimal giaBan;
 } 

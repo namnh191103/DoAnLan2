@@ -1,23 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
   <head>
     <title>Đặt hàng</title>
   </head>
-  <section>
-    <h2>Đặt hàng</h2>
-    <form th:action="@{/user/checkout}" method="post">
-      <label>Họ tên:</label>
-      <input type="text" name="hoTen" th:value="${user.hoTen}" required />
-      <label>Số điện thoại:</label>
-      <input
-        type="text"
-        name="soDienThoai"
-        th:value="${user.soDienThoai}"
-        required
-      />
-      <label>Địa chỉ:</label>
-      <input type="text" name="diaChi" th:value="${user.diaChi}" required />
-      <button type="submit">Xác nhận đặt hàng</button>
-    </form>
-  </section>
+  <body>
+    <div layout:fragment="content">
+      <h2>Đặt hàng</h2>
+      <form th:action="@{/user/checkout}" method="post">
+        <label>Họ tên:</label>
+        <input type="text" name="hoTen" th:value="${user.hoTen}" required />
+        <label>Số điện thoại:</label>
+        <input
+          type="text"
+          name="soDienThoai"
+          th:value="${user.soDienThoai}"
+          required
+        />
+        <label>Địa chỉ:</label>
+        <input type="text" name="diaChi" th:value="${user.diaChi}" required />
+        <button type="submit">Xác nhận đặt hàng</button>
+      </form>
+    </div>
+  </body>
 </html>

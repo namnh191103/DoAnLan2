@@ -21,47 +21,49 @@ public class DonHang {
     @JoinColumn(name = "khach_hang_id", nullable = false)
     private KhachHang khachHang;
 
-    @Column(nullable = false)
+    @Column(name = "ngay_dat_hang", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date ngayDatHang;
 
+    @Column(name = "ngay_giao_hang")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ngayGiaoHang;
 
+    @Column(name = "ngay_nhan_hang")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ngayNhanHang;
 
-    @Column(nullable = false, length = 45)
+    @Column(name = "trang_thai", nullable = false, length = 45)
     private String trangThai;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "tong_tien", nullable = false, precision = 10, scale = 2)
     private BigDecimal tongTien;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "tong_thanh_toan", nullable = false, precision = 10, scale = 2)
     private BigDecimal tongThanhToan;
 
-    @Column(length = 256)
+    @Column(name = "ghi_chu", length = 256)
     private String ghiChu;
 
-    @Column(nullable = false, length = 45)
+    @Column(name = "ho_ten", nullable = false, length = 45)
     private String hoTen;
 
-    @Column(nullable = false, length = 15)
+    @Column(name = "so_dien_thoai", nullable = false, length = 15)
     private String soDienThoai;
 
-    @Column(nullable = false, length = 64)
+    @Column(name = "dia_chi", nullable = false, length = 64)
     private String diaChi;
 
-    @Column(nullable = false, length = 45)
+    @Column(name = "tinh_thanh", nullable = false, length = 45)
     private String tinhThanh;
 
-    @Column(nullable = false, length = 45)
+    @Column(name = "quan_huyen", nullable = false, length = 45)
     private String quanHuyen;
 
-    @Column(nullable = false, length = 45)
+    @Column(name = "phuong_xa", nullable = false, length = 45)
     private String phuongXa;
 
-    @Column(length = 10)
+    @Column(name = "ma_buu_dien", length = 10)
     private String maBuuDien;
 
     @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL, orphanRemoval = true)

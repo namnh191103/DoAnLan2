@@ -79,4 +79,16 @@ public class KhachHangServiceImpl implements KhachHangService {
     public void deleteKhachHang(Integer id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public KhachHangDTO login(String email, String matKhau) {
+        Optional<KhachHang> optional = repository.findByEmail(email);
+        if (optional.isPresent()) {
+            KhachHang kh = optional.get();
+            if (kh.getMatKhau().equals(matKhau)) { // Nếu có mã hóa thì dùng BCrypt ở đây
+                return toDTO(kh);
+            }
+        }
+        return null;
+    }
 } 

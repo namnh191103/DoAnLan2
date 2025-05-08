@@ -1,8 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
   <head>
     <title>Đăng ký</title>
   </head>
+  <body>
+    <div layout:fragment="content">
+      <h2>Đăng ký</h2>
+      <form th:action="@{/register}" method="post">
+        <label>Email:</label>
+        <input type="email" name="email" required />
+        <label>Mật khẩu:</label>
+        <input type="password" name="password" required />
+        <label>Họ tên:</label>
+        <input type="text" name="hoTen" required />
+        <label>Số điện thoại:</label>
+        <input type="text" name="soDienThoai" required />
+        <button type="submit">Đăng ký</button>
+      </form>
+      <p>Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a></p>
   <section>
     <h2>Đăng ký</h2>
     <form th:action="@{/register}" method="post">

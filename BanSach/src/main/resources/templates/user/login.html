@@ -1,13 +1,112 @@
-<section>
-  <div
-    class="container d-flex justify-content-center align-items-center"
-    style="min-height: 80vh"
-  >
-    <div class="card shadow p-4" style="max-width: 400px; width: 100%">
-      <h2 class="text-center mb-4">Đăng nhập</h2>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Đăng nhập</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        min-height: 100vh;
+        background: linear-gradient(120deg, #a18cd1 0%, #fbc2eb 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Montserrat", Arial, sans-serif;
+      }
+      .login-card {
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        padding: 2.5rem 2.2rem 2rem 2.2rem;
+        max-width: 400px;
+        width: 100%;
+      }
+      .login-title {
+        text-align: center;
+        margin-bottom: 2.2rem;
+        font-weight: 700;
+        font-size: 2rem;
+        letter-spacing: 1px;
+        color: #2d2d2d;
+        font-family: "Montserrat", Arial, sans-serif;
+      }
+      .form-label {
+        font-weight: 600;
+        color: #2176ae;
+        margin-bottom: 0.5rem;
+        font-size: 1.08rem;
+      }
+      .form-control {
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        font-size: 1.08rem;
+        margin-bottom: 1.2rem;
+        border: 1.5px solid #b3d1f3;
+        background: #f4faff;
+        transition: border 0.2s;
+        font-family: "Montserrat", Arial, sans-serif;
+      }
+      .form-control:focus {
+        border: 2px solid #2176ae;
+        background: #e6f0fa;
+        box-shadow: none;
+      }
+      .gradient-btn {
+        background: linear-gradient(90deg, #5fa8d3 0%, #2176ae 100%);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.15rem;
+        padding: 0.85rem 0;
+        margin-top: 0.2rem;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 2px 8px rgba(33, 118, 174, 0.08);
+        transition: background 0.3s, transform 0.2s;
+        font-family: "Montserrat", Arial, sans-serif;
+      }
+      .gradient-btn:hover {
+        background: linear-gradient(90deg, #2176ae 0%, #5fa8d3 100%);
+        transform: translateY(-2px) scale(1.03);
+      }
+      .login-link {
+        text-align: center;
+        margin-top: 1.2rem;
+        color: #666;
+        font-size: 1rem;
+      }
+      .login-link a {
+        color: #2176ae;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-card">
+      <h2 class="login-title">Đăng nhập</h2>
+      <div
+        th:if="${error}"
+        class="alert alert-danger text-center mb-3"
+        th:text="${error}"
+      ></div>
       <form th:action="@{/login}" method="post">
         <div class="mb-3">
-          <label for="username" class="form-label">Email:</label>
+          <label for="username" class="form-label">Username</label>
           <input
             type="email"
             id="username"
@@ -18,7 +117,7 @@
           />
         </div>
         <div class="mb-3">
-          <label for="password" class="form-label">Mật khẩu:</label>
+          <label for="password" class="form-label">Password</label>
           <input
             type="password"
             id="password"
@@ -28,11 +127,17 @@
             required
           />
         </div>
-        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+        <button type="submit" class="btn gradient-btn w-100">Đăng nhập</button>
       </form>
-      <p class="text-center mt-3">
-        Chưa có tài khoản? <a th:href="@{/register}">Đăng ký</a>
-      </p>
+      <div class="login-link">
+        Bạn chưa có tài khoản? <a th:href="@{/register}">Đăng Ký Tại đây</a>
+      </div>
     </div>
-  </div>
-</section>
+    <!-- Bootstrap JS Bundle CDN -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoA6DQD5l5h9gqQ8Am1lWv7Zt4l6U8cvRT+8WcQ5p6ddwQ+"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

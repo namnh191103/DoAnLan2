@@ -9,4 +9,5 @@ public interface KhachHangService {
     KhachHangDTO createKhachHang(KhachHangDTO dto);
     KhachHangDTO updateKhachHang(Integer id, KhachHangDTO dto);
     void deleteKhachHang(Integer id);
+    KhachHangDTO login(String email, String matKhau);
 } 
