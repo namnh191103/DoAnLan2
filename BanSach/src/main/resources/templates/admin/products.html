@@ -1,35 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout-admin}"
+>
   <head>
     <title>Quản lý sản phẩm</title>
   </head>
-  <section>
-    <h2>Quản lý sản phẩm</h2>
-    <a th:href="@{/admin/products/add}"><button>Thêm sản phẩm</button></a>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Tiêu đề</th>
-          <th>Giá bán</th>
-          <th>Trạng thái</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="product : ${products}">
-          <td th:text="${product.id}"></td>
-          <td th:text="${product.tuaDe}"></td>
-          <td th:text="${product.giaBan}"></td>
-          <td
-            th:text="${product.daXuatBan} ? 'Đã xuất bản' : 'Chưa xuất bản'"
-          ></td>
-          <td>
-            <a th:href="@{'/admin/products/edit/' + ${product.id}}">Sửa</a> |
-            <a th:href="@{'/admin/products/delete/' + ${product.id}}">Xóa</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <body>
+    <div layout:fragment="content">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Quản lý sản phẩm</h2>
+        <a th:href="@{/admin/products/add}" class="btn btn-primary">
+          <i class="bi bi-plus-circle"></i> Thêm sản phẩm
+        </a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle bg-white">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Tiêu đề</th>
+              <th scope="col">Giá bán</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col" class="text-center">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="product : ${products}">
+              <td th:text="${product.id}"></td>
+              <td th:text="${product.tuaDe}"></td>
+              <td
+                th:text="${#numbers.formatDecimal(product.giaBan, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+              ></td>
+              <td>
+                <span th:if="${product.daXuatBan}" class="badge bg-success"
+                  >Đã xuất bản</span
+                >
+                <span
+                  th:unless="${product.daXuatBan}"
+                  class="badge bg-secondary"
+                  >Chưa xuất bản</span
+                >
+              </td>
+              <td class="text-center">
+                <a
+                  th:href="@{'/admin/products/edit/' + ${product.id}}"
+                  class="btn btn-sm btn-warning me-1"
+                >
+                  <i class="bi bi-pencil-square"></i> Sửa
+                </a>
+                <a
+                  th:href="@{'/admin/products/delete/' + ${product.id}}"
+                  class="btn btn-sm btn-danger"
+                  onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');"
+                >
+                  <i class="bi bi-trash"></i> Xóa
+                </a>
+              </td>
+            </tr>
+            <tr th:if="${products.size() == 0}">
+              <td colspan="5" class="text-center text-muted">
+                Không có sản phẩm nào.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
 </html>

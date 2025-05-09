@@ -18,4 +18,5 @@ public interface UserService {
     void delete(Integer id);
     boolean existsByEmail(String email);
     Page<UserDTO> findAll(Pageable pageable);
+    void changePassword(String email, String oldPassword, String newPassword);
 } 

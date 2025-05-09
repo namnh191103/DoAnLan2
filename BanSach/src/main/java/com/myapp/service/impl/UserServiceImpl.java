@@ -128,6 +128,17 @@ public class UserServiceImpl implements UserService {
             .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    @Override
+    public void changePassword(String email, String oldPassword, String newPassword) {
+        User user = userRepository.findByEmail(email.trim().toLowerCase())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        if (!passwordEncoder.matches(oldPassword, user.getMatKhau())) {
+            throw new RuntimeException("Mật khẩu cũ không đúng!");
+        }
+        user.setMatKhau(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
     private UserDTO convertToDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());

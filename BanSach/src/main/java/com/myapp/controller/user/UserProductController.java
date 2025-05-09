@@ -63,8 +63,17 @@ public class UserProductController {
 
     @GetMapping("/{duongDan}")
     public String getProductBySlug(@PathVariable String duongDan, Model model) {
-        ProductDTO product = productService.findByDuongDan(duongDan);
+        ProductDTO product = null;
+        try {
+            product = productService.findByDuongDan(duongDan);
+        } catch (Exception e) {
+            // Không tìm thấy sản phẩm
+        }
+        if (product == null || Boolean.FALSE.equals(product.getDaXuatBan())) {
+            model.addAttribute("message", "Sản phẩm không còn tồn tại hoặc đã bị gỡ.");
+            return "user/products/not-found";
+        }
         model.addAttribute("product", product);
-        return "user/products/detail";
+        return "user/product-detail";
     }
 } 

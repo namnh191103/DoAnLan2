@@ -2,7 +2,7 @@
 <html
   xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layout}"
+  layout:decorate="~{layout-admin}"
 >
   <head>
     <title>Quản lý người dùng</title>
@@ -16,7 +16,7 @@
             <th>ID</th>
             <th>Email</th>
             <th>Họ tên</th>
-            <th>Số điện thoại</th>
+            <th>Quyền</th>
             <th>Thao tác</th>
           </tr>
         </thead>
@@ -25,10 +25,10 @@
             <td th:text="${user.id}"></td>
             <td th:text="${user.email}"></td>
             <td th:text="${user.hoTen}"></td>
-            <td th:text="${user.soDienThoai}"></td>
+            <td th:text="${user.role}"></td>
             <td>
-              <a th:href="@{'/admin/users/edit/' + ${user.id}}">Sửa</a> |
-              <a th:href="@{'/admin/users/delete/' + ${user.id}}">Xóa</a>
+              <a th:href="@{'/admin/users/' + ${user.id} + '/edit'}">Sửa</a> |
+              <a th:href="@{'/admin/users/' + ${user.id} + '/delete'}">Xóa</a>
             </td>
           </tr>
         </tbody>

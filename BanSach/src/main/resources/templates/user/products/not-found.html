@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>Sản phẩm không tồn tại</title>
+  </head>
+  <body>
+    <div layout:fragment="content" class="container py-5">
+      <div class="alert alert-warning text-center">
+        <i class="bi bi-exclamation-triangle display-4 mb-3"></i>
+        <h3 th:text="${message} ?: 'Sản phẩm không còn tồn tại hoặc đã bị gỡ.'">
+          Sản phẩm không còn tồn tại hoặc đã bị gỡ.
+        </h3>
+        <a th:href="@{/user/products}" class="btn btn-primary mt-3"
+          ><i class="bi bi-arrow-left"></i> Quay lại danh sách sản phẩm</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

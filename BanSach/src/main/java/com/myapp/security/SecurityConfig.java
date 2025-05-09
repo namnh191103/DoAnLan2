@@ -48,7 +48,13 @@ public class SecurityConfig {
                     log.info("=== LOGIN SUCCESS ===");
                     log.info("User: {}", authentication.getName());
                     log.info("Authorities: {}", authentication.getAuthorities());
-                    response.sendRedirect("/?loginSuccess=true");
+                    boolean isAdmin = authentication.getAuthorities().stream()
+                        .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+                    if (isAdmin) {
+                        response.sendRedirect("/admin/dashboard");
+                    } else {
+                        response.sendRedirect("/");
+                    }
                 })
                 .failureHandler((request, response, exception) -> {
                     log.error("=== LOGIN FAILED ===");

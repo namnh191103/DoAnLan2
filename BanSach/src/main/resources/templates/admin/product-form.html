@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout-admin}"
+>
+  <head>
+    <title th:text="${title} ?: 'Thêm/Sửa sản phẩm'">Thêm/Sửa sản phẩm</title>
+  </head>
+  <body>
+    <div layout:fragment="content" class="container" style="max-width: 600px">
+      <h2 th:text="${title} ?: 'Thêm/Sửa sản phẩm'" class="mb-4"></h2>
+      <form
+        th:action="${action}"
+        th:object="${product}"
+        method="post"
+        novalidate
+      >
+        <div
+          th:if="${error}"
+          class="alert alert-danger"
+          th:text="${error}"
+        ></div>
+        <div
+          th:if="${success}"
+          class="alert alert-success"
+          th:text="${success}"
+        ></div>
+        <div class="mb-3">
+          <label for="tuaDe" class="form-label"
+            >Tiêu đề <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            th:field="*{tuaDe}"
+            class="form-control"
+            id="tuaDe"
+            required
+            maxlength="255"
+            placeholder="Nhập tiêu đề sản phẩm"
+          />
+          <div class="invalid-feedback">Vui lòng nhập tiêu đề.</div>
+        </div>
+        <div class="mb-3">
+          <label for="duongDan" class="form-label"
+            >Slug đường dẫn <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            th:field="*{duongDan}"
+            class="form-control"
+            id="duongDan"
+            required
+            maxlength="255"
+            placeholder="Nhập slug (không dấu, không khoảng trắng)"
+          />
+          <div class="invalid-feedback">Vui lòng nhập slug hợp lệ.</div>
+        </div>
+        <div class="mb-3">
+          <label for="tomTat" class="form-label"
+            >Tóm tắt <span class="text-danger">*</span></label
+          >
+          <textarea
+            th:field="*{tomTat}"
+            class="form-control"
+            id="tomTat"
+            rows="2"
+            required
+            maxlength="1000"
+            placeholder="Nhập tóm tắt sản phẩm"
+          ></textarea>
+          <div class="invalid-feedback">Vui lòng nhập tóm tắt.</div>
+        </div>
+        <div class="mb-3">
+          <label for="noiDung" class="form-label"
+            >Nội dung chi tiết <span class="text-danger">*</span></label
+          >
+          <textarea
+            th:field="*{noiDung}"
+            class="form-control"
+            id="noiDung"
+            rows="4"
+            required
+            maxlength="5000"
+            placeholder="Nhập nội dung chi tiết"
+          ></textarea>
+          <div class="invalid-feedback">Vui lòng nhập nội dung chi tiết.</div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="ngayXuatBan" class="form-label">Ngày xuất bản</label>
+            <input
+              type="date"
+              th:field="*{ngayXuatBan}"
+              class="form-control"
+              id="ngayXuatBan"
+            />
+          </div>
+          <div class="col-md-6 mb-3 d-flex align-items-center">
+            <div class="form-check mt-4">
+              <input
+                type="checkbox"
+                th:field="*{daXuatBan}"
+                class="form-check-input"
+                id="daXuatBan"
+              />
+              <label class="form-check-label" for="daXuatBan"
+                >Đã xuất bản</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="soLuongTon" class="form-label">Số lượng tồn</label>
+            <input
+              type="number"
+              th:field="*{soLuongTon}"
+              class="form-control"
+              id="soLuongTon"
+              min="0"
+              step="1"
+              placeholder="Nhập số lượng tồn"
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="phanTramGiamGia" class="form-label">% Giảm giá</label>
+            <input
+              type="number"
+              th:field="*{phanTramGiamGia}"
+              class="form-control"
+              id="phanTramGiamGia"
+              min="0"
+              max="100"
+              step="0.01"
+              placeholder="Nhập % giảm giá (nếu có)"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="giaNhap" class="form-label">Giá nhập</label>
+            <input
+              type="number"
+              th:field="*{giaNhap}"
+              class="form-control"
+              id="giaNhap"
+              min="0"
+              step="1000"
+              placeholder="Nhập giá nhập"
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="giaBan" class="form-label"
+              >Giá bán <span class="text-danger">*</span></label
+            >
+            <input
+              type="number"
+              th:field="*{giaBan}"
+              class="form-control"
+              id="giaBan"
+              min="0"
+              step="1000"
+              required
+              placeholder="Nhập giá bán"
+            />
+            <div class="invalid-feedback">Vui lòng nhập giá bán hợp lệ.</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="anhBia" class="form-label"
+            >Ảnh bìa (đường dẫn hoặc URL)</label
+          >
+          <input
+            type="text"
+            th:field="*{anhBia}"
+            class="form-control"
+            id="anhBia"
+            maxlength="500"
+            placeholder="Nhập đường dẫn ảnh bìa hoặc URL"
+          />
+        </div>
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label for="lengthCm" class="form-label">Dài (cm)</label>
+            <input
+              type="number"
+              th:field="*{lengthCm}"
+              class="form-control"
+              id="lengthCm"
+              min="0"
+              step="0.01"
+              placeholder="Dài"
+            />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="widthCm" class="form-label">Rộng (cm)</label>
+            <input
+              type="number"
+              th:field="*{widthCm}"
+              class="form-control"
+              id="widthCm"
+              min="0"
+              step="0.01"
+              placeholder="Rộng"
+            />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="heightCm" class="form-label">Cao (cm)</label>
+            <input
+              type="number"
+              th:field="*{heightCm}"
+              class="form-control"
+              id="heightCm"
+              min="0"
+              step="0.01"
+              placeholder="Cao"
+            />
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="weightKg" class="form-label">Khối lượng (kg)</label>
+            <input
+              type="number"
+              th:field="*{weightKg}"
+              class="form-control"
+              id="weightKg"
+              min="0"
+              step="0.01"
+              placeholder="Khối lượng"
+            />
+          </div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <a th:href="@{/admin/products}" class="btn btn-secondary">Quay lại</a>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Lưu
+          </button>
+        </div>
+      </form>
+    </div>
+    <script>
+      // Bootstrap validation
+      (function () {
+        "use strict";
+        var forms = document.querySelectorAll("form");
+        Array.prototype.slice.call(forms).forEach(function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+    </script>
+  </body>
+</html>
