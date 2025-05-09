@@ -15,6 +15,11 @@
         <p th:text="${product.tomTat}"></p>
         <p>Giá: <span th:text="${product.giaBan}"></span></p>
         <form th:action="@{'/user/cart/add/' + ${product.id}}" method="post">
+          <input
+            type="hidden"
+            th:name="${_csrf.parameterName}"
+            th:value="${_csrf.token}"
+          />
           <input type="number" name="soLuong" value="1" min="1" />
           <button type="submit">Thêm vào giỏ hàng</button>
         </form>

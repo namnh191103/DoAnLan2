@@ -1,79 +1,70 @@
 package com.myapp.model;
 
-import lombok.*;
 import jakarta.persistence.*;
-
+import lombok.Data;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Data
 @Entity
 @Table(name = "tac_pham")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class TacPham {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(name = "tua_de", nullable = false, length = 256)
+    
+    @Column(name = "tua_de", nullable = false)
     private String tuaDe;
-
-    @Column(name = "duong_dan", nullable = false, length = 256, unique = true)
+    
+    @Column(name = "duong_dan", nullable = false, unique = true)
     private String duongDan;
-
+    
     @Column(name = "tom_tat", nullable = false, columnDefinition = "nvarchar(max)")
     private String tomTat;
-
+    
     @Column(name = "noi_dung", nullable = false, columnDefinition = "nvarchar(max)")
     private String noiDung;
-
+    
     @Column(name = "ngay_xuat_ban")
-    @Temporal(TemporalType.DATE)
-    private Date ngayXuatBan;
-
+    private LocalDate ngayXuatBan;
+    
     @Column(name = "ngay_cap_nhat")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date ngayCapNhat;
-
+    private LocalDateTime ngayCapNhat;
+    
     @Column(name = "da_xuat_ban", nullable = false)
-    private Boolean daXuatBan;
-
+    private Boolean daXuatBan = false;
+    
     @Column(name = "so_luong_ton")
     private Integer soLuongTon;
-
-    @Column(name = "gia_nhap")
+    
+    @Column(name = "gia_nhap", precision = 10, scale = 2)
     private BigDecimal giaNhap;
-
-    @Column(name = "gia_ban")
+    
+    @Column(name = "gia_ban", precision = 10, scale = 2)
     private BigDecimal giaBan;
-
-    @Column(name = "phan_tram_giam_gia")
+    
+    @Column(name = "phan_tram_giam_gia", precision = 5, scale = 2)
     private BigDecimal phanTramGiamGia;
-
-    @Column(name = "anh_bia", nullable = false, length = 256)
+    
+    @Column(name = "anh_bia", nullable = false)
     private String anhBia;
-
+    
     @Column(name = "review_count")
-    private Integer reviewCount;
-
-    @Column(name = "average_rating")
+    private Integer reviewCount = 0;
+    
+    @Column(name = "average_rating", precision = 3, scale = 2)
     private BigDecimal averageRating;
-
-    @Column(name = "length_cm")
+    
+    @Column(name = "length_cm", precision = 5, scale = 2)
     private BigDecimal lengthCm;
-
-    @Column(name = "width_cm")
+    
+    @Column(name = "width_cm", precision = 5, scale = 2)
     private BigDecimal widthCm;
-
-    @Column(name = "height_cm")
+    
+    @Column(name = "height_cm", precision = 5, scale = 2)
     private BigDecimal heightCm;
-
-    @Column(name = "weight_kg")
+    
+    @Column(name = "weight_kg", precision = 5, scale = 2)
     private BigDecimal weightKg;
-
-    @OneToMany(mappedBy = "tacPham", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChiTietDonHang> chiTietDonHangs;
 } 

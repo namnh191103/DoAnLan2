@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class UserAdminController {
-    @GetMapping("/admin/users")
+    @GetMapping("/admin/user-management")
     public String users(Model model) {
         // model.addAttribute("users", ...);
         return "admin/users";

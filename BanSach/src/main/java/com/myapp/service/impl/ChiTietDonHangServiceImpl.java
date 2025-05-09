@@ -1,70 +1,80 @@
 package com.myapp.service.impl;
 
 import com.myapp.dto.ChiTietDonHangDTO;
+import com.myapp.dto.ProductDTO;
 import com.myapp.model.ChiTietDonHang;
+import com.myapp.model.DonHang;
+import com.myapp.model.Product;
 import com.myapp.repository.ChiTietDonHangRepository;
-import com.myapp.service.serviceinterface.ChiTietDonHangService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.myapp.service.ChiTietDonHangService;
+import com.myapp.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ChiTietDonHangServiceImpl implements ChiTietDonHangService {
-    @Autowired
-    private ChiTietDonHangRepository repository;
+    private final ChiTietDonHangRepository chiTietDonHangRepository;
+    private final ProductService productService;
 
-    private ChiTietDonHangDTO toDTO(ChiTietDonHang entity) {
+    @Override
+    @Transactional
+    public ChiTietDonHangDTO create(ChiTietDonHangDTO chiTietDonHangDTO) {
+        Product product = productService.findEntityById(chiTietDonHangDTO.getProductId());
+        ChiTietDonHang chiTietDonHang = ChiTietDonHang.builder()
+                .donHang(chiTietDonHangDTO.getDonHang())
+                .product(product)
+                .soLuong(chiTietDonHangDTO.getSoLuong())
+                .donGia(chiTietDonHangDTO.getDonGia())
+                .build();
+        return convertToDTO(chiTietDonHangRepository.save(chiTietDonHang));
+    }
+
+    @Override
+    public ChiTietDonHangDTO findById(Integer id) {
+        return chiTietDonHangRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new RuntimeException("Chi tiết đơn hàng không tồn tại"));
+    }
+
+    @Override
+    public List<ChiTietDonHangDTO> findByDonHang(DonHang donHang) {
+        return chiTietDonHangRepository.findByDonHang(donHang).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public ChiTietDonHangDTO update(Integer id, ChiTietDonHangDTO chiTietDonHangDTO) {
+        ChiTietDonHang chiTietDonHang = chiTietDonHangRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Chi tiết đơn hàng không tồn tại"));
+        Product product = productService.findEntityById(chiTietDonHangDTO.getProductId());
+        
+        chiTietDonHang.setProduct(product);
+        chiTietDonHang.setSoLuong(chiTietDonHangDTO.getSoLuong());
+        chiTietDonHang.setDonGia(chiTietDonHangDTO.getDonGia());
+        
+        return convertToDTO(chiTietDonHangRepository.save(chiTietDonHang));
+    }
+
+    @Override
+    @Transactional
+    public void delete(Integer id) {
+        chiTietDonHangRepository.deleteById(id);
+    }
+
+    private ChiTietDonHangDTO convertToDTO(ChiTietDonHang chiTietDonHang) {
         return ChiTietDonHangDTO.builder()
-                .id(entity.getId())
-                .donHangId(entity.getDonHang().getId())
-                .tacPhamId(entity.getTacPham().getId())
-                .soLuong(entity.getSoLuong())
-                .giaBan(entity.getGiaBan())
+                .id(chiTietDonHang.getId())
+                .donHang(chiTietDonHang.getDonHang())
+                .productId(chiTietDonHang.getProduct().getId())
+                .soLuong(chiTietDonHang.getSoLuong())
+                .donGia(chiTietDonHang.getDonGia())
                 .build();
-    }
-
-    private ChiTietDonHang toEntity(ChiTietDonHangDTO dto) {
-        // Chỉ map các trường cơ bản, các trường liên kết cần xử lý ở controller/service cao hơn
-        return ChiTietDonHang.builder()
-                .id(dto.getId())
-                .soLuong(dto.getSoLuong())
-                .giaBan(dto.getGiaBan())
-                .build();
-    }
-
-    @Override
-    public ChiTietDonHangDTO getChiTietDonHangById(Integer id) {
-        return repository.findById(id).map(this::toDTO).orElse(null);
-    }
-
-    @Override
-    public List<ChiTietDonHangDTO> getAllChiTietDonHang() {
-        return repository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
-    }
-
-    @Override
-    public ChiTietDonHangDTO createChiTietDonHang(ChiTietDonHangDTO dto) {
-        ChiTietDonHang entity = toEntity(dto);
-        return toDTO(repository.save(entity));
-    }
-
-    @Override
-    public ChiTietDonHangDTO updateChiTietDonHang(Integer id, ChiTietDonHangDTO dto) {
-        Optional<ChiTietDonHang> optional = repository.findById(id);
-        if (optional.isPresent()) {
-            ChiTietDonHang entity = optional.get();
-            entity.setSoLuong(dto.getSoLuong());
-            entity.setGiaBan(dto.getGiaBan());
-            return toDTO(repository.save(entity));
-        }
-        return null;
-    }
-
-    @Override
-    public void deleteChiTietDonHang(Integer id) {
-        repository.deleteById(id);
     }
 } 

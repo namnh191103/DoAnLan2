@@ -1,16 +1,19 @@
 package com.myapp.dto;
 
-import lombok.*;
-import java.math.BigDecimal;
+import com.myapp.model.DonHang;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ChiTietDonHangDTO {
     private Integer id;
-    private Integer donHangId;
-    private Integer tacPhamId;
+    private DonHang donHang;
+    private Integer productId;
     private Integer soLuong;
-    private BigDecimal giaBan;
+    private Double donGia;
 } 

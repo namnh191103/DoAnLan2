@@ -1,17 +1,17 @@
 package com.myapp.controller.user;
 
+import com.myapp.dto.UserDTO;
+import com.myapp.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthController {
-    @Autowired
-    private com.myapp.service.serviceinterface.KhachHangService khachHangService;
+    private final UserService userService;
 
     @GetMapping("/login")
     public String login() {
@@ -19,24 +19,20 @@ public class AuthController {
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(Model model) {
+        model.addAttribute("user", new UserDTO());
         return "user/register";
     }
 
-    @PostMapping("/do-login")
-    public String doLogin(
-            @RequestParam("username") String email,
-            @RequestParam("password") String matKhau,
-            Model model,
-            HttpSession session
-    ) {
-        var user = khachHangService.login(email, matKhau);
-        if (user != null) {
-            session.setAttribute("user", user);
-            return "redirect:/";
-        } else {
-            model.addAttribute("error", "Sai tài khoản hoặc mật khẩu!");
-            return "user/login";
+    @PostMapping("/do-register")
+    public String doRegister(@ModelAttribute UserDTO user, Model model) {
+        try {
+            userService.register(user);
+            return "redirect:/login?registered=true";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("user", user);
+            return "user/register";
         }
     }
 } 

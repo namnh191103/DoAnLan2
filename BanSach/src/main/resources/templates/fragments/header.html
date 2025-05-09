@@ -1,65 +1,106 @@
-<div th:fragment="header">
+<div
+  style="
+    background: orange;
+    color: black;
+    text-align: center;
+    padding: 10px;
+    font-size: 20px;
+  "
+>
+  HEADER TEST 123456
+</div>
+<div
+  th:fragment="header"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
   <nav
     class="navbar navbar-expand-lg navbar-light bg-white shadow-sm rounded-bottom mb-4 py-2"
   >
-    <div class="container">
-      <a
-        class="navbar-brand fw-bold text-primary fs-3"
-        th:href="@{/}"
-        style="letter-spacing: 1px"
+    <div class="container d-flex align-items-center justify-content-between">
+      <div class="header-logo">
+        <a
+          class="navbar-brand fw-bold text-primary fs-3"
+          th:href="@{/}"
+          style="letter-spacing: 1px"
+        >
+          <i class="bi bi-book-half me-2"></i>MyApp
+          <span class="text-dark">Bookstore</span>
+        </a>
+      </div>
+      <div
+        class="search-bar-container d-flex mx-3 flex-grow-1 justify-content-center align-items-center"
+        style="max-width: 260px"
       >
-        <i class="bi bi-book-half me-2"></i>MyApp
-        <span class="text-dark">Bookstore</span>
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-          <li class="nav-item">
-            <a class="nav-link px-3 fw-semibold" th:href="@{/}"
-              ><i class="bi bi-house-door me-1"></i>Trang chủ</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link px-3 fw-semibold" th:href="@{/user/products}"
-              ><i class="bi bi-journal-bookmark me-1"></i>Sản phẩm</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link px-3 fw-semibold" th:href="@{/user/cart}"
-              ><i class="bi bi-cart3 me-1"></i>Giỏ hàng</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link px-3 fw-semibold" th:href="@{/user/account}"
-              ><i class="bi bi-person-circle me-1"></i>Tài khoản</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link px-3 fw-semibold" th:href="@{/admin/dashboard}"
-              ><i class="bi bi-speedometer2 me-1"></i>Quản trị</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link px-3 fw-semibold" th:href="@{/login}"
-              ><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link px-3 fw-semibold" th:href="@{/register}"
-              ><i class="bi bi-person-plus me-1"></i>Đăng ký</a
-            >
-          </li>
-        </ul>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Tìm kiếm sản phẩm..."
+          autocomplete="off"
+          class="form-control"
+          style="flex: 1; min-width: 0"
+        />
+        <button
+          type="button"
+          class="btn btn-primary ms-2 d-flex align-items-center justify-content-center"
+          style="height: 38px; min-width: 38px; padding: 0 10px"
+          onclick="performSearch()"
+        >
+          <i class="bi bi-search"></i>
+        </button>
+        <div id="searchResults" class="search-results"></div>
+      </div>
+      <div class="header-menu flex-shrink-1">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+              <a class="nav-link px-3 fw-semibold" th:href="@{/}"
+                ><i class="bi bi-house-door me-1"></i>Trang chủ</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link px-3 fw-semibold" th:href="@{/user/products}"
+                ><i class="bi bi-journal-bookmark me-1"></i>Sản phẩm</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link px-3 fw-semibold" th:href="@{/user/cart}"
+                ><i class="bi bi-cart3 me-1"></i>Giỏ hàng</a
+              >
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+              <a class="nav-link px-3 fw-semibold" th:href="@{/user/account}"
+                ><i class="bi bi-person-circle me-1"></i>Tài khoản</a
+              >
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+              <a class="nav-link px-3 fw-semibold" th:href="@{/logout}"
+                ><i class="bi bi-box-arrow-right me-1"></i>Đăng xuất</a
+              >
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+              <a class="nav-link px-3 fw-semibold" th:href="@{/login}"
+                ><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a
+              >
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+              <a class="nav-link px-3 fw-semibold" th:href="@{/register}"
+                ><i class="bi bi-person-plus me-1"></i>Đăng ký</a
+              >
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>
@@ -81,5 +122,67 @@
     .navbar-brand {
       letter-spacing: 1px;
     }
+    .search-bar-container {
+      position: relative;
+      max-width: 260px;
+      margin: 0 24px;
+    }
+    .search-bar-container input.form-control {
+      background: #f8fafc;
+      border: 1.5px solid #b6d4fe;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(79, 140, 255, 0.07);
+      transition: border 0.18s, box-shadow 0.18s;
+    }
+    .search-bar-container input.form-control:focus {
+      border: 2px solid #2563eb;
+      box-shadow: 0 2px 12px rgba(37, 99, 235, 0.13);
+      background: #fff;
+    }
+    #searchResults {
+      position: absolute;
+      top: 110%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #e3e8ee;
+      border-radius: 8px;
+      z-index: 100;
+      max-height: 320px;
+      overflow-y: auto;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .search-result-item {
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+    .search-result-item:hover {
+      background: #f0f4ff;
+    }
+    .no-result {
+      color: #888;
+      padding: 12px 16px;
+    }
+    .pagination-controls {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 16px;
+    }
+    @media (max-width: 991px) {
+      .search-bar-container {
+        display: none !important;
+      }
+    }
   </style>
 </div>
+
+<script>
+  function performSearch() {
+    const searchTerm = document.getElementById("searchInput").value.trim();
+    if (searchTerm.length === 0) {
+      document.getElementById("searchResults").innerHTML = "";
+      return;
+    }
+    fetchResults(searchTerm, 0);
+  }
+</script>

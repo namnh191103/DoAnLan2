@@ -2,30 +2,26 @@ package com.myapp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.math.BigDecimal;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "chi_tiet_don_hang")
-public class ChiTietDonHang {
+@Table(name = "gio_hang_item")
+public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "don_hang_id")
-    private DonHang donHang;
+    @JoinColumn(name = "khach_hang_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "tac_pham_id", nullable = false)
     private Product product;
 
-    @Column(name = "so_luong")
+    @Column(name = "so_luong", nullable = false)
     private Integer soLuong;
-
-    @Column(name = "don_gia")
-    private Double donGia;
 } 

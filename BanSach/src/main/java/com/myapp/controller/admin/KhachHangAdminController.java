@@ -1,41 +1,56 @@
 package com.myapp.controller.admin;
 
-import com.myapp.dto.KhachHangDTO;
-import com.myapp.service.serviceinterface.KhachHangService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.myapp.dto.UserDTO;
+import com.myapp.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
-@RestController
-@RequestMapping("/api/admin/khach-hang")
+@Controller
+@RequestMapping("/admin/users")
+@RequiredArgsConstructor
 public class KhachHangAdminController {
-    @Autowired
-    private KhachHangService khachHangService;
+    private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<KhachHangDTO>> getAll() {
-        return ResponseEntity.ok(khachHangService.getAllKhachHang());
+    public String listUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
+        Page<UserDTO> users = userService.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
+        model.addAttribute("users", users);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", users.getTotalPages());
+        return "admin/users/list";
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<KhachHangDTO> getById(@PathVariable Integer id) {
-        return ResponseEntity.ok(khachHangService.getKhachHangById(id));
+    public String viewUser(@PathVariable Integer id, Model model) {
+        UserDTO user = userService.findById(id);
+        model.addAttribute("user", user);
+        return "admin/users/view";
     }
 
-    @PostMapping
-    public ResponseEntity<KhachHangDTO> create(@RequestBody KhachHangDTO dto) {
-        return ResponseEntity.ok(khachHangService.createKhachHang(dto));
+    @GetMapping("/{id}/edit")
+    public String editUser(@PathVariable Integer id, Model model) {
+        UserDTO user = userService.findById(id);
+        model.addAttribute("user", user);
+        return "admin/users/edit";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<KhachHangDTO> update(@PathVariable Integer id, @RequestBody KhachHangDTO dto) {
-        return ResponseEntity.ok(khachHangService.updateKhachHang(id, dto));
+    @PostMapping("/{id}")
+    public String updateUser(@PathVariable Integer id, @ModelAttribute UserDTO userDTO) {
+        userService.update(id, userDTO);
+        return "redirect:/admin/users";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        khachHangService.deleteKhachHang(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/{id}/delete")
+    public String deleteUser(@PathVariable Integer id) {
+        userService.delete(id);
+        return "redirect:/admin/users";
     }
 } 

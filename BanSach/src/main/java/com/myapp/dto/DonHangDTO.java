@@ -2,7 +2,7 @@ package com.myapp.dto;
 
 import lombok.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -12,9 +12,9 @@ import java.util.List;
 public class DonHangDTO {
     private Integer id;
     private Integer khachHangId;
-    private Date ngayDatHang;
-    private Date ngayGiaoHang;
-    private Date ngayNhanHang;
+    private LocalDateTime ngayDatHang;
+    private LocalDateTime ngayGiaoHang;
+    private LocalDateTime ngayNhanHang;
     private String trangThai;
     private BigDecimal tongTien;
     private BigDecimal tongThanhToan;

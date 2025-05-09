@@ -1,21 +1,19 @@
 package com.myapp.dto;
 
-import lombok.*;
+import lombok.Data;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class TacPhamDTO {
+public class ProductDTO {
     private Integer id;
     private String tuaDe;
     private String duongDan;
     private String tomTat;
     private String noiDung;
-    private Date ngayXuatBan;
-    private Date ngayCapNhat;
+    private LocalDate ngayXuatBan;
+    private LocalDateTime ngayCapNhat;
     private Boolean daXuatBan;
     private Integer soLuongTon;
     private BigDecimal giaNhap;

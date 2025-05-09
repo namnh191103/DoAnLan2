@@ -1,18 +1,17 @@
 package com.myapp.dto;
 
-import lombok.*;
-import java.util.Date;
+import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class KhachHangDTO {
+public class UserDTO {
     private Integer id;
     private String email;
+    private String matKhau;
     private String hoTen;
     private String soDienThoai;
-    private Date ngayTao;
+    private String hinhAnh;
+    private LocalDateTime ngayTao;
     private Boolean daKichHoat;
     private String loaiXacThuc;
     private String maXacThuc;

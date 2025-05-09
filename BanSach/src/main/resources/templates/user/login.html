@@ -104,11 +104,17 @@
         class="alert alert-danger text-center mb-3"
         th:text="${error}"
       ></div>
-      <form th:action="@{/login}" method="post">
+      <div
+        th:if="${param.registered}"
+        class="alert alert-success text-center mb-3"
+      >
+        Đăng ký thành công! Vui lòng đăng nhập.
+      </div>
+      <form th:action="@{/do-login}" method="post">
         <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
+          <label for="username" class="form-label">Email</label>
           <input
-            type="email"
+            type="text"
             id="username"
             name="username"
             class="form-control"
@@ -117,15 +123,18 @@
           />
         </div>
         <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
+          <label for="matKhau" class="form-label">Mật khẩu</label>
           <input
             type="password"
-            id="password"
-            name="password"
+            id="matKhau"
+            name="matKhau"
             class="form-control"
             placeholder="Nhập mật khẩu"
             required
           />
+        </div>
+        <div th:if="${param.error}" class="alert alert-danger text-center mb-3">
+          Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.
         </div>
         <button type="submit" class="btn gradient-btn w-100">Đăng nhập</button>
       </form>
