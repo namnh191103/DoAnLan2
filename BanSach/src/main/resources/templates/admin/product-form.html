@@ -14,6 +14,7 @@
         th:action="${action}"
         th:object="${product}"
         method="post"
+        enctype="multipart/form-data"
         novalidate
       >
         <div
@@ -168,17 +169,34 @@
           </div>
         </div>
         <div class="mb-3">
-          <label for="anhBia" class="form-label"
-            >Ảnh bìa (đường dẫn hoặc URL)</label
+          <label for="anhBiaFile" class="form-label"
+            >Ảnh bìa mới (chọn file để thay đổi)</label
           >
           <input
-            type="text"
-            th:field="*{anhBia}"
+            type="file"
+            name="anhBiaFile"
             class="form-control"
-            id="anhBia"
-            maxlength="500"
-            placeholder="Nhập đường dẫn ảnh bìa hoặc URL"
+            id="anhBiaFile"
+            accept="image/*"
           />
+          <div
+            th:if="${product.anhBia != null && !#strings.isEmpty(product.anhBia)}"
+            class="mt-2"
+          >
+            <label class="form-label">Ảnh bìa hiện tại:</label>
+            <img
+              th:src="@{${product.anhBia}}"
+              alt="Ảnh bìa hiện tại"
+              style="max-width: 200px; max-height: 200px; display: block"
+            />
+            <input type="hidden" th:field="*{anhBia}" />
+          </div>
+          <div
+            th:if="${product.anhBia == null || #strings.isEmpty(product.anhBia)}"
+            class="mt-2"
+          >
+            <label class="form-label">Chưa có ảnh bìa.</label>
+          </div>
         </div>
         <div class="row">
           <div class="col-md-3 mb-3">

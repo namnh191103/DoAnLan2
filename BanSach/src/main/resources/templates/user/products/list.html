@@ -1,1 +1,101 @@
-<a th:href="@{'/user/products/' + ${product.duongDan}}"> </a>
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <title>Danh sách sản phẩm</title>
+  </head>
+  <body>
+    <div layout:fragment="content" class="container py-4">
+      <h2 class="mb-4">Danh sách sản phẩm</h2>
+      <!-- Hiển thị kết quả tìm kiếm nếu có keyword -->
+      <div th:if="${keyword != null}">
+        <h5 class="mb-3">
+          Kết quả tìm kiếm cho:
+          <span class="text-primary" th:text="'\'' + ${keyword} + '\''"></span>
+        </h5>
+      </div>
+      <!-- Nếu không có sản phẩm -->
+      <div th:if="${products.empty}">
+        <div class="alert alert-warning text-center">
+          Không tìm thấy sản phẩm phù hợp.
+        </div>
+      </div>
+      <!-- Nếu có sản phẩm -->
+      <div class="row g-4" th:if="${!products.empty}">
+        <div
+          class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch"
+          th:each="product : ${products}"
+        >
+          <div class="card product-card w-100 h-100">
+            <a
+              th:href="@{'/user/products/' + ${product.duongDan}}"
+              class="text-decoration-none text-dark"
+            >
+              <img
+                th:src="${product.anhBia}"
+                alt="Ảnh bìa"
+                class="card-img-top product-img"
+              />
+              <div class="card-body">
+                <div class="product-title" th:text="${product.tuaDe}"></div>
+                <div
+                  class="product-price text-danger fw-bold"
+                  th:text="${#numbers.formatDecimal(product.giaBan, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+                ></div>
+                <button class="btn btn-primary btn-sm w-100 mt-2">
+                  Xem chi tiết
+                </button>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Phân trang nếu có -->
+      <div
+        th:if="${products.totalPages > 1}"
+        class="mt-4 d-flex justify-content-center"
+      >
+        <nav>
+          <ul class="pagination">
+            <li
+              class="page-item"
+              th:classappend="${products.first} ? 'disabled'"
+            >
+              <a
+                class="page-link"
+                th:href="@{|/user/products?page=${products.number - 1}|}"
+                aria-label="Previous"
+                >&laquo;</a
+              >
+            </li>
+            <li
+              class="page-item"
+              th:each="pageNum : ${#numbers.sequence(0, products.totalPages - 1)}"
+              th:classappend="${pageNum == products.number} ? 'active'"
+            >
+              <a
+                class="page-link"
+                th:href="@{|/user/products?page=${pageNum}|}"
+                th:text="${pageNum + 1}"
+              ></a>
+            </li>
+            <li
+              class="page-item"
+              th:classappend="${products.last} ? 'disabled'"
+            >
+              <a
+                class="page-link"
+                th:href="@{|/user/products?page=${products.number + 1}|}"
+                aria-label="Next"
+                >&raquo;</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </body>
+</html>

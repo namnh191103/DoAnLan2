@@ -14,6 +14,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Controller
@@ -38,7 +46,8 @@ public class ProductAdminController {
     public String addProduct(@ModelAttribute("product") ProductDTO productDTO,
                             BindingResult result,
                             RedirectAttributes redirectAttributes,
-                            Model model) {
+                            Model model,
+                            @RequestParam(value = "anhBiaFile", required = false) MultipartFile anhBiaFile) {
         if (productDTO.getTuaDe() == null || productDTO.getTuaDe().trim().isEmpty()) {
             model.addAttribute("error", "Tiêu đề không được để trống!");
             model.addAttribute("title", "Thêm sản phẩm");
@@ -50,6 +59,17 @@ public class ProductAdminController {
             model.addAttribute("title", "Thêm sản phẩm");
             model.addAttribute("action", "/admin/products/add");
             return "admin/product-form";
+        }
+        if (anhBiaFile != null && !anhBiaFile.isEmpty()) {
+            try {
+                String imagePath = saveImageFile(anhBiaFile);
+                productDTO.setAnhBia(imagePath);
+            } catch (IOException e) {
+                model.addAttribute("error", "Lỗi khi lưu ảnh bìa: " + e.getMessage());
+                model.addAttribute("title", "Thêm sản phẩm");
+                model.addAttribute("action", "/admin/products/add");
+                return "admin/product-form";
+            }
         }
         try {
             productService.create(productDTO);
@@ -82,7 +102,8 @@ public class ProductAdminController {
                              @ModelAttribute("product") ProductDTO productDTO,
                              BindingResult result,
                              RedirectAttributes redirectAttributes,
-                             Model model) {
+                             Model model,
+                             @RequestParam(value = "anhBiaFile", required = false) MultipartFile anhBiaFile) {
         if (productDTO.getTuaDe() == null || productDTO.getTuaDe().trim().isEmpty()) {
             model.addAttribute("error", "Tiêu đề không được để trống!");
             model.addAttribute("title", "Sửa sản phẩm");
@@ -94,6 +115,17 @@ public class ProductAdminController {
             model.addAttribute("title", "Sửa sản phẩm");
             model.addAttribute("action", "/admin/products/edit/" + id);
             return "admin/product-form";
+        }
+        if (anhBiaFile != null && !anhBiaFile.isEmpty()) {
+            try {
+                String imagePath = saveImageFile(anhBiaFile);
+                productDTO.setAnhBia(imagePath);
+            } catch (IOException e) {
+                model.addAttribute("error", "Lỗi khi lưu ảnh bìa: " + e.getMessage());
+                model.addAttribute("title", "Sửa sản phẩm");
+                model.addAttribute("action", "/admin/products/edit/" + id);
+                return "admin/product-form";
+            }
         }
         try {
             productService.update(id, productDTO);
@@ -116,5 +148,24 @@ public class ProductAdminController {
             redirectAttributes.addFlashAttribute("error", "Không thể xóa sản phẩm: " + e.getMessage());
         }
         return "redirect:/admin/products";
+    }
+
+    /**
+     * Lưu file ảnh upload vào thư mục uploads/product-images (ngoài src) và trả về đường dẫn tương đối
+     */
+    private String saveImageFile(MultipartFile file) throws IOException {
+        // Đường dẫn thư mục uploads ngoài src
+        String uploadDir = "uploads/product-images/";
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        String originalFilename = file.getOriginalFilename();
+        String ext = originalFilename != null && originalFilename.contains(".") ? originalFilename.substring(originalFilename.lastIndexOf('.')) : "";
+        String uniqueName = UUID.randomUUID().toString() + ext;
+        Path filePath = Paths.get(uploadDir, uniqueName);
+        Files.copy(file.getInputStream(), filePath);
+        // Trả về đường dẫn để lưu vào DB, mapping với static resource
+        return "/product-images/" + uniqueName;
     }
 } 

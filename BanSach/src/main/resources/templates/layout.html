@@ -136,10 +136,11 @@
       function performSearch() {
         const searchTerm = document.getElementById("searchInput").value.trim();
         if (searchTerm.length === 0) {
-          document.getElementById("searchResults").innerHTML = "";
+          window.location.href = "/user/products";
           return;
         }
-        fetchResults(searchTerm, 0);
+        window.location.href =
+          "/user/products/search?keyword=" + encodeURIComponent(searchTerm);
       }
     </script>
   </body>
