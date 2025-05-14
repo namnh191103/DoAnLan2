@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout-admin}"
+>
+  <head>
+    <title>Chi tiết người dùng</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <h2>Chi tiết người dùng</h2>
+      <table>
+        <tr>
+          <th>ID</th>
+          <td th:text="${user.id}"></td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td th:text="${user.email}"></td>
+        </tr>
+        <tr>
+          <th>Họ tên</th>
+          <td th:text="${user.hoTen}"></td>
+        </tr>
+        <tr>
+          <th>Số điện thoại</th>
+          <td th:text="${user.soDienThoai}"></td>
+        </tr>
+        <tr>
+          <th>Hình ảnh</th>
+          <td>
+            <img
+              th:src="${user.hinhAnh}"
+              alt="Ảnh đại diện"
+              style="max-width: 100px; max-height: 100px"
+            />
+          </td>
+        </tr>
+        <tr>
+          <th>Ngày tạo</th>
+          <td th:text="${user.ngayTao}"></td>
+        </tr>
+        <tr>
+          <th>Kích hoạt</th>
+          <td th:text="${user.daKichHoat}"></td>
+        </tr>
+        <tr>
+          <th>Loại xác thực</th>
+          <td th:text="${user.loaiXacThuc}"></td>
+        </tr>
+        <tr>
+          <th>Mã xác thực</th>
+          <td th:text="${user.maXacThuc}"></td>
+        </tr>
+      </table>
+      <a th:href="@{/admin/users}">Quay lại danh sách</a>
+    </div>
+  </body>
+</html>

@@ -3,6 +3,8 @@ package com.myapp.dto;
 import com.myapp.model.User;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Data Transfer Object (DTO) cho thông tin người dùng
@@ -62,6 +64,11 @@ public class UserDTO {
     private String matKhau;
 
     /**
+     * Danh sách tên vai trò/quyền của người dùng
+     */
+    private List<String> vaiTros;
+
+    /**
      * Chuyển đổi từ User sang UserDTO
      * 
      * @param user Đối tượng User cần chuyển đổi
@@ -79,6 +86,9 @@ public class UserDTO {
         dto.setLoaiXacThuc(user.getLoaiXacThuc());
         dto.setMaXacThuc(user.getMaXacThuc());
         dto.setMatKhau(user.getMatKhau());
+        if (user.getVaiTros() != null) {
+            dto.setVaiTros(user.getVaiTros().stream().map(vt -> vt.getTenVaiTro()).collect(Collectors.toList()));
+        }
         return dto;
     }
 

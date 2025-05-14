@@ -150,6 +150,9 @@ public class UserServiceImpl implements UserService {
         dto.setDaKichHoat(user.getDaKichHoat());
         dto.setLoaiXacThuc(user.getLoaiXacThuc());
         dto.setMaXacThuc(user.getMaXacThuc());
+        if (user.getVaiTros() != null) {
+            dto.setVaiTros(user.getVaiTros().stream().map(vt -> vt.getTenVaiTro()).collect(java.util.stream.Collectors.toList()));
+        }
         return dto;
     }
 } 

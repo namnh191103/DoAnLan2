@@ -3,7 +3,7 @@ package com.myapp.controller.user;
 
 // Import các thư viện cần thiết
 import com.myapp.dto.UserDTO;
-import com.myapp.service.OrderService;
+import com.myapp.service.DonHangUserService;
 import com.myapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -26,7 +26,7 @@ public class UserOrderController {
      * Service xử lý logic liên quan đến đơn hàng
      * Được inject thông qua constructor
      */
-    private final OrderService orderService;
+    private final DonHangUserService donHangUserService;
 
     /**
      * Service xử lý logic liên quan đến người dùng
@@ -51,7 +51,7 @@ public class UserOrderController {
     public String listOrders(Authentication authentication, Model model) {
         String email = authentication.getName();
         UserDTO userDTO = userService.findByEmail(email);
-        model.addAttribute("orders", orderService.getOrdersByUser(userDTO));
+        model.addAttribute("donHangs", donHangUserService.getOrdersByUser(userDTO));
         return "user/orders/list";
     }
 
@@ -78,13 +78,13 @@ public class UserOrderController {
                             Model model) {
         String email = authentication.getName();
         UserDTO userDTO = userService.findByEmail(email);
-        var order = orderService.getOrderById(id);
+        var donHang = donHangUserService.getOrderById(id);
         
-        if (order == null || !order.getUser().getEmail().equals(email)) {
+        if (donHang == null || !donHang.getUser().getEmail().equals(email)) {
             return "redirect:/user/orders";
         }
         
-        model.addAttribute("order", order);
+        model.addAttribute("donHang", donHang);
         return "user/orders/detail";
     }
 
@@ -110,7 +110,7 @@ public class UserOrderController {
         String email = authentication.getName();
         UserDTO userDTO = userService.findByEmail(email);
         try {
-            orderService.cancelOrder(id, userDTO);
+            donHangUserService.cancelOrder(id, userDTO);
             return "redirect:/user/orders/" + id + "?success=Canceled";
         } catch (Exception e) {
             return "redirect:/user/orders/" + id + "?error=" + e.getMessage();

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout-admin}"
+>
+  <head>
+    <title>Sửa người dùng</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <h2>Sửa người dùng</h2>
+      <form
+        th:action="@{'/admin/users/' + ${user.id}}"
+        th:object="${user}"
+        method="post"
+      >
+        <table>
+          <tr>
+            <th>ID</th>
+            <td th:text="${user.id}"></td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td th:text="${user.email}"></td>
+          </tr>
+          <tr>
+            <th>Họ tên</th>
+            <td><input type="text" th:field="*{hoTen}" /></td>
+          </tr>
+
+          <tr>
+            <th>Số điện thoại</th>
+            <td><input type="text" th:field="*{soDienThoai}" /></td>
+          </tr>
+
+          <tr>
+            <th>Hình ảnh (URL)</th>
+            <td><input type="text" th:field="*{hinhAnh}" /></td>
+          </tr>
+        </table>
+        <button type="submit">Lưu</button>
+        <a th:href="@{/admin/users}">Hủy</a>
+      </form>
+    </div>
+  </body>
+</html>

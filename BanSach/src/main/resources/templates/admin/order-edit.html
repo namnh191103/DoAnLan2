@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout-admin}"
+>
+  <head>
+    <title>Sửa đơn hàng</title>
+    <link
+      rel="stylesheet"
+      th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css}"
+    />
+  </head>
+  <body>
+    <div layout:fragment="content" class="container py-4">
+      <h2 class="mb-4 text-primary">
+        <i class="bi bi-pencil-square me-2"></i>Sửa đơn hàng
+      </h2>
+      <form
+        th:action="@{'/admin/orders/edit/' + ${order.id}}"
+        th:object="${order}"
+        method="post"
+        class="bg-white p-4 rounded shadow-sm"
+      >
+        <div class="mb-3">
+          <label class="form-label">Mã đơn</label>
+          <input
+            type="text"
+            class="form-control"
+            th:value="${order.id}"
+            readonly
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Tên người nhận</label>
+          <input
+            type="text"
+            class="form-control"
+            th:field="*{hoTen}"
+            readonly
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Số điện thoại</label>
+          <input type="text" class="form-control" th:field="*{soDienThoai}" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Địa chỉ</label>
+          <input type="text" class="form-control" th:field="*{diaChi}" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Trạng thái</label>
+          <select class="form-select" th:field="*{trangThai}">
+            <option value="CHỜ_XÁC_NHẬN">Chờ xác nhận</option>
+            <option value="ĐÃ_GIAO">Đã giao</option>
+            <option value="ĐÃ_HỦY">Đã hủy</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Ghi chú</label>
+          <textarea
+            class="form-control"
+            th:field="*{ghiChu}"
+            rows="2"
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Tổng tiền</label>
+          <input
+            type="text"
+            class="form-control"
+            th:value="${#numbers.formatDecimal(order.tongTien, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+            readonly
+          />
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Lưu thay đổi
+          </button>
+          <a th:href="@{/admin/orders}" class="btn btn-secondary ms-2"
+            >Quay lại</a
+          >
+        </div>
+      </form>
+    </div>
+    <script
+      th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"
+    ></script>
+  </body>
+</html>

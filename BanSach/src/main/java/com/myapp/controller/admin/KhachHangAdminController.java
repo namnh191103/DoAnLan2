@@ -22,24 +22,24 @@ public class KhachHangAdminController {
             @RequestParam(defaultValue = "10") int size,
             Model model) {
         Page<UserDTO> users = userService.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
-        model.addAttribute("users", users);
+        model.addAttribute("users", users.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", users.getTotalPages());
-        return "admin/users/list";
+        return "admin/users";
     }
 
     @GetMapping("/{id}")
     public String viewUser(@PathVariable Integer id, Model model) {
         UserDTO user = userService.findById(id);
         model.addAttribute("user", user);
-        return "admin/users/view";
+        return "admin/user-view";
     }
 
     @GetMapping("/{id}/edit")
     public String editUser(@PathVariable Integer id, Model model) {
         UserDTO user = userService.findById(id);
         model.addAttribute("user", user);
-        return "admin/users/edit";
+        return "admin/user-edit";
     }
 
     @PostMapping("/{id}")
