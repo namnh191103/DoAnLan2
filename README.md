@@ -5,4 +5,6 @@
 3. Làm giao diện đăng nhập và trang chủ
 4. Tạo controller, service, reponsitory cho đăng nhập, đăng ký
 5. Làm trang quản trị admin, tạo trang quản lý sản phẩm với chức năng thêm sửa xóa và cho nó hiển thị lên xem chi tiết sản phẩm ở người dùng.
+6. Làm trang đặt hàng,đơn hàng,quản lí đơn hàng admin,  nút đặt hàng, tích hợp vnpay,
+
 
