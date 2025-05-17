@@ -13,4 +13,13 @@ public interface DonHangService {
     void delete(Integer id);
     List<DonHangDTO> findByUserId(Integer userId);
     Page<DonHangDTO> findByStatus(String status, Pageable pageable);
+
+    // Thống kê dashboard cho admin
+    interface DashboardStats {
+        java.math.BigDecimal getTongDoanhThu();
+        long getTongSoDon();
+        long getSoDonHoanThanh();
+        java.util.List<java.util.Map<String, Object>> getDoanhThu7Ngay();
+    }
+    DashboardStats getDashboardStats();
 } 

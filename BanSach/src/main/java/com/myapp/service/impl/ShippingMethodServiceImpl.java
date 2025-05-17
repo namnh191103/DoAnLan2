@@ -14,7 +14,10 @@ public class ShippingMethodServiceImpl implements ShippingMethodService {
 
     @Override
     public List<ShippingMethod> findAllActive() {
-        return shippingMethodRepository.findByActiveTrue();
+        return shippingMethodRepository.findByActiveTrue()
+            .stream()
+            .filter(sm -> sm.getName() == null || !sm.getName().toLowerCase().contains("cửa hàng"))
+            .toList();
     }
 
     @Override

@@ -19,4 +19,18 @@ public interface UserService {
     boolean existsByEmail(String email);
     Page<UserDTO> findAll(Pageable pageable);
     void changePassword(String email, String oldPassword, String newPassword);
+    void addRoleAdmin(Integer id);
+    void removeRoleAdmin(Integer id);
+
+    /**
+     * Locks a user account.
+     * @param id the ID of the user to lock
+     */
+    void lockUser(Integer id);
+
+    /**
+     * Unlocks a user account.
+     * @param id the ID of the user to unlock
+     */
+    void unlockUser(Integer id);
 } 

@@ -12,7 +12,7 @@
     />
     <link
       rel="stylesheet"
-      th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css}"
+      th:href="@{/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.css}"
     />
   </head>
   <body>
@@ -55,9 +55,11 @@
         <div class="mb-3">
           <label class="form-label">Trạng thái</label>
           <select class="form-select" th:field="*{trangThai}">
-            <option value="CHỜ_XÁC_NHẬN">Chờ xác nhận</option>
-            <option value="ĐÃ_GIAO">Đã giao</option>
-            <option value="ĐÃ_HỦY">Đã hủy</option>
+            <option value="CHO_XAC_NHAN">Chờ xác nhận</option>
+            <option value="CHO_THANH_TOAN">Chờ thanh toán</option>
+            <option value="DA_THANH_TOAN">Đã thanh toán</option>
+            <option value="DA_GIAO">Đã giao</option>
+            <option value="DA_HUY">Đã hủy</option>
           </select>
         </div>
         <div class="mb-3">

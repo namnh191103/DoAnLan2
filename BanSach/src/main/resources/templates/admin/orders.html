@@ -12,7 +12,7 @@
     />
     <link
       rel="stylesheet"
-      th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css}"
+      th:href="@{/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.css}"
     />
   </head>
   <body>
@@ -43,9 +43,9 @@
                 <span
                   th:text="${order.trangThai}"
                   th:classappend="'badge ' +
-                        (${order.trangThai} == 'ĐÃ_GIAO' ? 'bg-success' :
-                        (${order.trangThai} == 'CHỜ_XÁC_NHẬN' ? 'bg-warning text-dark' :
-                        (${order.trangThai} == 'ĐÃ_HỦY' ? 'bg-danger' : 'bg-secondary')))"
+                        (${order.trangThai} == 'DA_GIAO' ? 'bg-success' :
+                        (${order.trangThai} == 'CHO_XAC_NHAN' ? 'bg-warning text-dark' :
+                        (${order.trangThai} == 'DA_HUY' ? 'bg-danger' : 'bg-secondary')))"
                 >
                 </span>
               </td>

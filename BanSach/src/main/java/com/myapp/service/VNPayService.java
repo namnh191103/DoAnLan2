@@ -16,7 +16,7 @@ public class VNPayService {
     private final String vnp_TmnCode = "PL3MJRUO";
     private final String vnp_HashSecret ="PIYRCT1T0VQB5YP28Y0NSEZ32962F7FP";
     private final String vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    private final String vnp_ReturnUrl = "http://localhost:8080/payment/vnpay-return";
+    private final String vnp_ReturnUrl = "http://localhost:8080/user/checkout/payment/vnpay-return";
     public String createPaymentUrl(Integer orderId, BigDecimal amount, HttpServletRequest request) {
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", "2.1.0");
@@ -38,11 +38,19 @@ public class VNPayService {
         StringBuilder query = new StringBuilder();
         for (String name : fieldNames) {
             String value = vnp_Params.get(name);
+
+            // Encode tên và giá trị
+            String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8);
+            String encodedValue = URLEncoder.encode(value, StandardCharsets.UTF_8);
+
+            // Tạo chuỗi hashData giống format query
             if (hashData.length() > 0) hashData.append('&');
-            hashData.append(name).append('=').append(value);
-            query.append(URLEncoder.encode(name, StandardCharsets.US_ASCII)).append('=')
-                 .append(URLEncoder.encode(value, StandardCharsets.US_ASCII)).append('&');
+            hashData.append(encodedName).append('=').append(encodedValue);
+
+            // Tạo query string
+            query.append(encodedName).append('=').append(encodedValue).append('&');
         }
+
         String secureHash = hmacSHA512(vnp_HashSecret, hashData.toString());
         query.append("vnp_SecureHash=").append(secureHash);
         return vnp_Url + "?" + query.toString();
@@ -51,13 +59,26 @@ public class VNPayService {
     public boolean validateSignature(Map<String, String> params, String receivedHash) {
         Map<String, String> sorted = new TreeMap<>(params);
         sorted.remove("vnp_SecureHash");
+        sorted.remove("vnp_SecureHashType"); // nên loại bỏ cái này nếu tồn tại
+
         StringBuilder hashData = new StringBuilder();
         for (Map.Entry<String, String> entry : sorted.entrySet()) {
             if (hashData.length() > 0) hashData.append('&');
-            hashData.append(entry.getKey()).append('=').append(entry.getValue());
+
+            // Encode key và value
+            String encodedKey = URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8);
+            String encodedValue = URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8);
+
+            hashData.append(encodedKey).append('=').append(encodedValue);
         }
+
         String calculatedHash = hmacSHA512(vnp_HashSecret, hashData.toString());
+        System.out.println("hashData = " + hashData.toString());
+        System.out.println("receivedHash = " + receivedHash);
+        System.out.println("calculatedHash = " + calculatedHash);
         return calculatedHash.equalsIgnoreCase(receivedHash);
+
+
     }
 
     private String hmacSHA512(String key, String data) {

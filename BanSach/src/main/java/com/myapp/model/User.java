@@ -63,7 +63,7 @@ public class User {
      * Trạng thái kích hoạt tài khoản, không được để trống
      */
     @Column(nullable = false)
-    private Boolean daKichHoat;
+    private Boolean daKichHoat = false;
     
     /**
      * Phương thức xác thực tài khoản, không được để trống
@@ -77,6 +77,8 @@ public class User {
     @Column
     private String maXacThuc;
 
+    private boolean daKhoa = false; // Trường mới để đánh dấu tài khoản bị khóa
+
     /**
      * Danh sách các vai trò của người dùng
      * Quan hệ nhiều-nhiều với bảng VaiTro
@@ -89,4 +91,12 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "vai_tro_id")
     )
     private Set<VaiTro> vaiTros;
+
+    public boolean isDaKhoa() {
+        return daKhoa;
+    }
+
+    public void setDaKhoa(boolean daKhoa) {
+        this.daKhoa = daKhoa;
+    }
 } 

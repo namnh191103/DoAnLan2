@@ -5,16 +5,124 @@
   layout:decorate="~{layout-admin}"
 >
   <head>
-    <title>Dashboard Quản trị</title>
+    <title>Thống kê kinh doanh</title>
+    <link
+      rel="stylesheet"
+      th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.css}"
+    />
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <style>
+      .stat-card {
+        min-width: 200px;
+      }
+    </style>
   </head>
   <body>
-    <div layout:fragment="content">
-      <h2>Dashboard Quản trị</h2>
-      <ul>
-        <li><a th:href="@{/admin/users}">Quản lý người dùng</a></li>
-        <li><a th:href="@{/admin/products}">Quản lý sản phẩm</a></li>
-        <li><a th:href="@{/admin/orders}">Quản lý đơn hàng</a></li>
-      </ul>
+    <div layout:fragment="content" class="container py-4">
+      <h2 class="mb-4 text-primary">
+        <i class="bi bi-bar-chart-line me-2"></i>Thống kê kinh doanh
+      </h2>
+      <div class="row mb-4 g-3">
+        <div class="col-md-4">
+          <div class="card stat-card shadow-sm text-center">
+            <div class="card-body">
+              <div
+                class="fs-4 text-success mb-2"
+                th:text="${#numbers.formatDecimal(tongDoanhThu, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+              ></div>
+              <div class="fw-bold">Tổng doanh thu (DA_GIAO)</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card stat-card shadow-sm text-center">
+            <div class="card-body">
+              <div class="fs-4 text-primary mb-2" th:text="${tongSoDon}"></div>
+              <div class="fw-bold">Tổng số đơn hàng</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card stat-card shadow-sm text-center">
+            <div class="card-body">
+              <div
+                class="fs-4 text-info mb-2"
+                th:text="${soDonHoanThanh}"
+              ></div>
+              <div class="fw-bold">Số đơn đã hoàn thành (DA_GIAO)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Biểu đồ doanh thu 7 ngày gần nhất</h5>
+          <div
+            id="chart_doanhthu_7ngay"
+            style="width: 100%; height: 400px"
+          ></div>
+        </div>
+      </div>
+      <script
+        type="application/json"
+        id="doanhThu7NgayJson"
+        th:utext="${doanhThu7NgayJson}"
+      ></script>
+      <script th:inline="javascript">
+        /*<![CDATA[*/
+        var doanhThu7Ngay = [];
+        try {
+          doanhThu7Ngay = JSON.parse(
+            document.getElementById("doanhThu7NgayJson").textContent
+          );
+        } catch (e) {
+          doanhThu7Ngay = [];
+        }
+        var chartData = [];
+        var headerRow = ["Ngày", "Doanh thu"];
+        chartData.push(headerRow);
+
+        doanhThu7Ngay.forEach(function (item) {
+          if (item && item.ngay && item.doanhThu != null) {
+            var parts = ("" + item.ngay).split("-");
+            if (parts.length === 3) {
+              var year = Number(parts[0]);
+              var month = Number(parts[1]) - 1;
+              var day = Number(parts[2]);
+              var dateObj = new Date(year, month, day);
+              if (!isNaN(dateObj.getTime()) && !isNaN(Number(item.doanhThu))) {
+                chartData.push([dateObj, Number(item.doanhThu)]);
+              }
+            }
+          }
+        });
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+          var data = google.visualization.arrayToDataTable(chartData);
+          var options = {
+            title: "Biểu đồ doanh thu 7 ngày gần nhất",
+            hAxis: { title: "Ngày", format: "dd/MM" },
+            vAxis: { title: "Doanh thu (VNĐ)" },
+            legend: { position: "none" },
+          };
+          var chart = new google.visualization.ColumnChart(
+            document.getElementById("chart_doanhthu_7ngay")
+          );
+          chart.draw(data, options);
+        }
+        /*]]>*/
+      </script>
     </div>
+    <script
+      th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"
+    ></script>
   </body>
 </html>

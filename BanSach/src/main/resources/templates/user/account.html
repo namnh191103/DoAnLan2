@@ -110,7 +110,11 @@
         class="alert alert-danger text-center mb-3"
         th:text="${error}"
       ></div>
-      <form autocomplete="off">
+      <form
+        th:action="@{/user/account/update-phone}"
+        method="post"
+        autocomplete="off"
+      >
         <div class="mb-3">
           <label class="form-label">Email:</label>
           <input
@@ -132,12 +136,18 @@
         <div class="mb-3">
           <label class="form-label">Số điện thoại:</label>
           <input
-            type="text"
+            type="number"
             class="form-control"
+            name="soDienThoai"
             th:value="${user.soDienThoai}"
-            readonly
+            required
+            min="0"
+            step="1"
           />
         </div>
+        <button type="submit" class="btn gradient-btn w-100 mb-2">
+          Cập nhật số điện thoại
+        </button>
       </form>
       <div class="section-title"><i class="bi bi-key"></i>Đổi mật khẩu</div>
       <form

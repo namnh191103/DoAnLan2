@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.myapp.model.TrangThaiDonHang;
 
 /**
  * Service xử lý logic liên quan đến đơn hàng
@@ -80,10 +81,10 @@ public class DonHangUserService {
         if (!donHang.getUser().getEmail().equals(userDTO.getEmail())) {
             throw new Exception("Bạn không có quyền hủy đơn hàng này");
         }
-        if (!"CHỜ_XÁC_NHẬN".equals(donHang.getTrangThai())) {
+        if (!donHang.getTrangThai().equals(TrangThaiDonHang.CHO_XAC_NHAN)) {
             throw new Exception("Không thể hủy đơn hàng ở trạng thái này");
         }
-        donHang.setTrangThai("ĐÃ_HỦY");
+        donHang.setTrangThai(TrangThaiDonHang.DA_HUY);
         donHangRepository.save(donHang);
     }
 
@@ -109,7 +110,7 @@ public class DonHangUserService {
         DonHang donHang = new DonHang();
         donHang.setUser(user);
         donHang.setNgayDatHang(LocalDateTime.now());
-        donHang.setTrangThai("CHỜ_XÁC_NHẬN");
+        donHang.setTrangThai(TrangThaiDonHang.CHO_XAC_NHAN);
         donHang.setGhiChu(note);
         donHang.setHoTen(user.getHoTen());
         donHang.setSoDienThoai(phoneNumber);
@@ -131,13 +132,15 @@ public class DonHangUserService {
         }
         donHang.setChiTietDonHangs(chiTietDonHangs);
         donHang.setTongTien(tongTien);
-        donHang.setTongThanhToan(tongTien.add(shippingMethod != null ? shippingMethod.getFee() : BigDecimal.ZERO));
+        BigDecimal shippingFee = (shippingMethod != null && shippingMethod.getFee() != null) ? shippingMethod.getFee() : BigDecimal.ZERO;
+        if (shippingFee.compareTo(BigDecimal.ZERO) < 0) shippingFee = BigDecimal.ZERO;
+        donHang.setTongThanhToan(tongTien.add(shippingFee));
         DonHang saved = donHangRepository.save(donHang);
         cartRepository.deleteAll(cartItems);
         return saved;
     }
 
-    public DonHang createOrderWithStatus(UserDTO userDTO, String shippingAddress, String phoneNumber, String note, ShippingMethod shippingMethod, PaymentMethod paymentMethod, String trangThai) throws Exception {
+    public DonHang createOrderWithStatus(UserDTO userDTO, String shippingAddress, String phoneNumber, String note, ShippingMethod shippingMethod, PaymentMethod paymentMethod, TrangThaiDonHang trangThai) throws Exception {
         User user = userService.findByEmail(userDTO.getEmail()).getUser();
         List<Cart> cartItems = cartRepository.findByUserEmail(userDTO.getEmail());
         if (cartItems.isEmpty()) {
@@ -168,7 +171,9 @@ public class DonHangUserService {
         }
         donHang.setChiTietDonHangs(chiTietDonHangs);
         donHang.setTongTien(tongTien);
-        donHang.setTongThanhToan(tongTien.add(shippingMethod != null ? shippingMethod.getFee() : BigDecimal.ZERO));
+        BigDecimal shippingFee2 = (shippingMethod != null && shippingMethod.getFee() != null) ? shippingMethod.getFee() : BigDecimal.ZERO;
+        if (shippingFee2.compareTo(BigDecimal.ZERO) < 0) shippingFee2 = BigDecimal.ZERO;
+        donHang.setTongThanhToan(tongTien.add(shippingFee2));
         DonHang saved = donHangRepository.save(donHang);
         return saved;
     }

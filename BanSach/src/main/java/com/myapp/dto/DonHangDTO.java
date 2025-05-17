@@ -4,6 +4,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.myapp.model.TrangThaiDonHang;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +16,7 @@ public class DonHangDTO {
     private LocalDateTime ngayDatHang;
     private LocalDateTime ngayGiaoHang;
     private LocalDateTime ngayNhanHang;
-    private String trangThai;
+    private TrangThaiDonHang trangThai;
     private BigDecimal tongTien;
     private BigDecimal tongThanhToan;
     private String ghiChu;

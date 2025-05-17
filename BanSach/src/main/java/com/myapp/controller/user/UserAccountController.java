@@ -80,4 +80,39 @@ public class UserAccountController {
         model.addAttribute("user", user);
         return "user/account";
     }
+
+    /**
+     * Xử lý request POST cho việc cập nhật số điện thoại
+     * 
+     * @param authentication Thông tin xác thực của người dùng hiện tại
+     * @param soDienThoai Số điện thoại mới
+     * @param model Model để truyền dữ liệu đến view
+     * @return Tên view template "user/account"
+     * 
+     * URL mapping: "/user/account/update-phone"
+     * Chức năng:
+     * - Lấy email của người dùng đang đăng nhập
+     * - Gọi service để cập nhật số điện thoại
+     * - Xử lý các trường hợp thành công/thất bại
+     * - Thêm thông báo và thông tin người dùng vào model
+     */
+    @PostMapping("/update-phone")
+    public String updatePhone(
+            Authentication authentication,
+            @RequestParam("soDienThoai") String soDienThoai,
+            Model model
+    ) {
+        String email = authentication.getName();
+        try {
+            UserDTO user = userService.findByEmail(email);
+            user.setSoDienThoai(soDienThoai);
+            userService.update(user.getId(), user);
+            model.addAttribute("success", "Cập nhật số điện thoại thành công!");
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
+        UserDTO user = userService.findByEmail(email);
+        model.addAttribute("user", user);
+        return "user/account";
+    }
 } 

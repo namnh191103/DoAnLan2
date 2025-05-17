@@ -9,6 +9,7 @@ import com.myapp.dto.DonHangDTO;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import com.myapp.model.TrangThaiDonHang;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,8 +38,8 @@ public class OrderAdminController {
     @GetMapping("/admin/orders/confirm/{id}")
     public String confirmOrder(@PathVariable Integer id) {
         DonHangDTO order = donHangService.findById(id);
-        if (order != null && !"ĐÃ_GIAO".equals(order.getTrangThai())) {
-            order.setTrangThai("ĐÃ_GIAO");
+        if (order != null && !TrangThaiDonHang.DA_GIAO.equals(order.getTrangThai())) {
+            order.setTrangThai(TrangThaiDonHang.DA_GIAO);
             donHangService.update(id, order);
         }
         return "redirect:/admin/orders";

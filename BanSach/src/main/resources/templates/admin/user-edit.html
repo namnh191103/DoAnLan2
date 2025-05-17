@@ -26,20 +26,75 @@
           </tr>
           <tr>
             <th>Họ tên</th>
-            <td><input type="text" th:field="*{hoTen}" /></td>
+            <td>
+              <span
+                th:if="${#lists.contains(user.vaiTros, 'ROLE_ADMIN')}"
+                th:text="${user.hoTen}"
+              ></span>
+              <input
+                th:if="${!#lists.contains(user.vaiTros, 'ROLE_ADMIN')}"
+                type="text"
+                th:field="*{hoTen}"
+              />
+            </td>
           </tr>
-
           <tr>
             <th>Số điện thoại</th>
-            <td><input type="text" th:field="*{soDienThoai}" /></td>
+            <td>
+              <span
+                th:if="${#lists.contains(user.vaiTros, 'ROLE_ADMIN')}"
+                th:text="${user.soDienThoai}"
+              ></span>
+              <input
+                th:if="${!#lists.contains(user.vaiTros, 'ROLE_ADMIN')}"
+                type="text"
+                th:field="*{soDienThoai}"
+              />
+            </td>
           </tr>
-
           <tr>
             <th>Hình ảnh (URL)</th>
-            <td><input type="text" th:field="*{hinhAnh}" /></td>
+            <td>
+              <span
+                th:if="${#lists.contains(user.vaiTros, 'ROLE_ADMIN')}"
+                th:text="${user.hinhAnh}"
+              ></span>
+              <input
+                th:if="${!#lists.contains(user.vaiTros, 'ROLE_ADMIN')}"
+                type="text"
+                th:field="*{hinhAnh}"
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>Phân quyền Admin</th>
+            <td>
+              <input
+                type="checkbox"
+                name="isAdmin"
+                th:checked="${#lists.contains(user.vaiTros, 'ROLE_ADMIN')}"
+                th:disabled="${user.email == #authentication.name}"
+              />
+              <span
+                th:if="${user.email == #authentication.name}"
+                style="color: gray"
+                >(Không thể tự bỏ quyền admin của chính mình)</span
+              >
+            </td>
           </tr>
         </table>
-        <button type="submit">Lưu</button>
+        <div
+          th:if="${#lists.contains(user.vaiTros, 'ROLE_ADMIN')}"
+          style="color: red; margin: 10px 0"
+        >
+          Chỉ được phân quyền, không được sửa thông tin cá nhân của admin!
+        </div>
+        <button
+          th:if="${!#lists.contains(user.vaiTros, 'ROLE_ADMIN')}"
+          type="submit"
+        >
+          Lưu
+        </button>
         <a th:href="@{/admin/users}">Hủy</a>
       </form>
     </div>

@@ -27,15 +27,13 @@
             </tr>
             <tr>
               <th>Trạng thái:</th>
-              <td>
-                <span
-                  th:text="${donHang.trangThai}"
-                  th:classappend="'badge ' +
-                        (${donHang.trangThai} == 'ĐÃ_GIAO' ? 'bg-success' :
-                        (${donHang.trangThai} == 'CHỜ_XÁC_NHẬN' ? 'bg-warning text-dark' :
-                        (${donHang.trangThai} == 'ĐÃ_HỦY' ? 'bg-danger' : 'bg-secondary')))"
-                />
-              </td>
+              <td
+                th:text="${donHang.trangThai}"
+                th:classappend="'badge ' +
+                      (${donHang.trangThai} == 'DA_GIAO' ? 'bg-success' :
+                      (${donHang.trangThai} == 'CHO_XAC_NHAN' ? 'bg-warning text-dark' :
+                      (${donHang.trangThai} == 'DA_HUY' ? 'bg-danger' : 'bg-secondary')))"
+              />
             </tr>
             <tr>
               <th>Ghi chú:</th>
@@ -96,7 +94,7 @@
           >Quay lại danh sách</a
         >
         <form
-          th:if="${donHang.trangThai == 'CHỜ_XÁC_NHẬN'}"
+          th:if="${donHang.trangThai == 'CHO_XAC_NHAN'}"
           th:action="@{'/user/orders/' + ${donHang.id} + '/cancel'}"
           method="post"
           onsubmit="return confirm('Bạn chắc chắn muốn hủy đơn hàng này?');"
@@ -110,7 +108,7 @@
     ></script>
     <link
       rel="stylesheet"
-      th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css}"
+      th:href="@{/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.css}"
     />
   </body>
 </html>

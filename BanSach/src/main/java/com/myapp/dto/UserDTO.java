@@ -64,6 +64,11 @@ public class UserDTO {
     private String matKhau;
 
     /**
+     * Trạng thái khóa của người dùng
+     */
+    private boolean daKhoa;
+
+    /**
      * Danh sách tên vai trò/quyền của người dùng
      */
     private List<String> vaiTros;
@@ -86,6 +91,7 @@ public class UserDTO {
         dto.setLoaiXacThuc(user.getLoaiXacThuc());
         dto.setMaXacThuc(user.getMaXacThuc());
         dto.setMatKhau(user.getMatKhau());
+        dto.setDaKhoa(user.isDaKhoa());
         if (user.getVaiTros() != null) {
             dto.setVaiTros(user.getVaiTros().stream().map(vt -> vt.getTenVaiTro()).collect(Collectors.toList()));
         }

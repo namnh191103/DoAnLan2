@@ -35,13 +35,13 @@
                 <span
                   th:text="${donHang.trangThai}"
                   th:classappend="'badge ' +
-                            (${donHang.trangThai} == 'ĐÃ_GIAO' ? 'bg-success' :
-                            (${donHang.trangThai} == 'CHỜ_XÁC_NHẬN' ? 'bg-warning text-dark' :
-                            (${donHang.trangThai} == 'ĐÃ_HỦY' ? 'bg-danger' : 'bg-secondary')))"
+                            (${donHang.trangThai} == 'DA_GIAO' ? 'bg-success' :
+                            (${donHang.trangThai} == 'CHO_XAC_NHAN' ? 'bg-warning text-dark' :
+                            (${donHang.trangThai} == 'DA_HUY' ? 'bg-danger' : 'bg-secondary')))"
                 />
               </td>
               <td
-                th:text="${#numbers.formatDecimal(donHang.tongTien, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+                th:text="${#numbers.formatDecimal(donHang.tongThanhToan, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
               ></td>
               <td class="text-center">
                 <a
@@ -66,7 +66,7 @@
     ></script>
     <link
       rel="stylesheet"
-      th:href="@{/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css}"
+      th:href="@{/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.css}"
     />
   </body>
 </html>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
+import com.myapp.model.TrangThaiDonHang;
 
 /**
  * Controller xử lý các request liên quan đến thanh toán đơn hàng
@@ -74,6 +75,7 @@ public class UserCheckoutController {
      * 
      * @param authentication Thông tin xác thực của người dùng hiện tại
      * @param model Model để truyền dữ liệu đến view
+     * @param selectedShippingMethodId ID của phương thức vận chuyển được chọn
      * @return Tên view template "user/checkout"
      * 
      * URL mapping: "/user/checkout"
@@ -84,15 +86,21 @@ public class UserCheckoutController {
      * - Thêm thông tin vào model để hiển thị trên view
      */
     @GetMapping
-    public String checkoutPage(Authentication authentication, Model model) {
+    public String checkoutPage(Authentication authentication, Model model, @RequestParam(value = "shippingMethodId", required = false) Integer selectedShippingMethodId) {
         String email = authentication.getName();
         UserDTO userDTO = userService.findByEmail(email);
         var cartItems = cartService.getCartByUser(userDTO);
+        var shippingMethods = shippingMethodService.findAllActive();
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("total", cartService.calculateTotal(cartItems));
         model.addAttribute("user", userDTO);
-        model.addAttribute("shippingMethods", shippingMethodService.findAllActive());
+        model.addAttribute("shippingMethods", shippingMethods);
         model.addAttribute("paymentMethods", paymentMethodService.findAllActive());
+        if (selectedShippingMethodId == null && !shippingMethods.isEmpty()) {
+            selectedShippingMethodId = shippingMethods.get(0).getId();
+        }
+        model.addAttribute("selectedShippingMethodId", selectedShippingMethodId);
+        model.addAttribute("selectedShippingMethod", selectedShippingMethodId != null ? shippingMethodService.findById(selectedShippingMethodId) : null);
         return "user/checkout";
     }
 
@@ -137,7 +145,7 @@ public class UserCheckoutController {
                 log.info("Đặt hàng COD thành công, đơn hàng id={}", donHang.getId());
                 return "redirect:/user/payment-success";
             } else if ("VNPAY".equals(paymentMethod)) {
-                var donHang = donHangUserService.createOrderWithStatus(userDTO, shippingAddress, phoneNumber, note, shippingMethod, paymentMethodObj, "CHỜ THANH TOÁN");
+                var donHang = donHangUserService.createOrderWithStatus(userDTO, shippingAddress, phoneNumber, note, shippingMethod, paymentMethodObj, TrangThaiDonHang.CHO_THANH_TOAN);
                 String paymentUrl = vnpayService.createPaymentUrl(donHang.getId(), donHang.getTongThanhToan(), request);
                 log.info("Đặt hàng VNPay, redirect đến VNPay, đơn hàng id={}", donHang.getId());
                 return "redirect:" + paymentUrl;
@@ -168,20 +176,20 @@ public class UserCheckoutController {
             model.addAttribute("error", "Không tìm thấy đơn hàng!");
             return "user/payment-fail";
         }
-        if (!"CHỜ THANH TOÁN".equals(donHang.getTrangThai())) {
+        if (!donHang.getTrangThai().equals(TrangThaiDonHang.CHO_THANH_TOAN)) {
             log.warn("VNPay callback: Đơn hàng không ở trạng thái chờ thanh toán, id={}", donHang.getId());
             model.addAttribute("error", "Trạng thái đơn hàng không hợp lệ!");
             return "user/payment-fail";
         }
         if ("00".equals(vnp_ResponseCode)) {
-            donHang.setTrangThai("ĐÃ THANH TOÁN");
+            donHang.setTrangThai(TrangThaiDonHang.DA_THANH_TOAN);
             donHangUserService.save(donHang);
             log.info("Thanh toán VNPay thành công, đơn hàng id={}", donHang.getId());
             // Xóa giỏ hàng nếu cần
             model.addAttribute("success", "Thanh toán thành công!");
             return "user/payment-success";
         } else {
-            donHang.setTrangThai("THANH TOÁN THẤT BẠI");
+            donHang.setTrangThai(TrangThaiDonHang.THANH_TOAN_THAT_BAI);
             donHangUserService.save(donHang);
             log.warn("Thanh toán VNPay thất bại, đơn hàng id={}", donHang.getId());
             model.addAttribute("error", "Thanh toán thất bại!");

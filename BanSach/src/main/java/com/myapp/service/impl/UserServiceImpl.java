@@ -139,6 +139,45 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void addRoleAdmin(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        VaiTro roleAdmin = vaiTroRepository.findByTenVaiTro("ROLE_ADMIN");
+        if (roleAdmin != null && (user.getVaiTros() == null || !user.getVaiTros().contains(roleAdmin))) {
+            if (user.getVaiTros() == null) user.setVaiTros(new java.util.HashSet<>());
+            user.getVaiTros().add(roleAdmin);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void removeRoleAdmin(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        VaiTro roleAdmin = vaiTroRepository.findByTenVaiTro("ROLE_ADMIN");
+        if (roleAdmin != null && user.getVaiTros() != null && user.getVaiTros().contains(roleAdmin)) {
+            user.getVaiTros().remove(roleAdmin);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void lockUser(Integer id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        user.setDaKhoa(true);
+        userRepository.save(user);
+        log.info("User with id {} locked.", id);
+    }
+
+    @Override
+    public void unlockUser(Integer id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        user.setDaKhoa(false);
+        userRepository.save(user);
+        log.info("User with id {} unlocked.", id);
+    }
+
     private UserDTO convertToDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
@@ -150,6 +189,7 @@ public class UserServiceImpl implements UserService {
         dto.setDaKichHoat(user.getDaKichHoat());
         dto.setLoaiXacThuc(user.getLoaiXacThuc());
         dto.setMaXacThuc(user.getMaXacThuc());
+        dto.setDaKhoa(user.isDaKhoa());
         if (user.getVaiTros() != null) {
             dto.setVaiTros(user.getVaiTros().stream().map(vt -> vt.getTenVaiTro()).collect(java.util.stream.Collectors.toList()));
         }

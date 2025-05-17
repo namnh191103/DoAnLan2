@@ -5,6 +5,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.myapp.model.TrangThaiDonHang;
 
 /**
  * Lớp DonHang đại diện cho một đơn hàng trong hệ thống
@@ -66,8 +67,9 @@ public class DonHang {
      * Ví dụ: CHỜ_XÁC_NHẬN, ĐANG_GIAO, ĐÃ_GIAO, ĐÃ_HỦY
      * Không được phép null
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "trang_thai", nullable = false)
-    private String trangThai;
+    private TrangThaiDonHang trangThai;
 
     /**
      * Tổng tiền hàng trước khi áp dụng các khoản giảm giá
