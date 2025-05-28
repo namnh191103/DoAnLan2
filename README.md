@@ -13,5 +13,6 @@ Tính toán lại tiền ship vs hiển thị ở trang chi tiết đơn hang
 admin chỉ được phân quyền ko sửa thông tin
 ko được xóa tài khoản đổi lại thành khóa tài khoản 
 vẽ được biểu đồ
+8. Chỉnh sửa chút giao diện và thêm quên mật khẩu bằng otp
 
 
