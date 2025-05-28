@@ -27,7 +27,7 @@ public class ChiTietDonHang {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id; // Khóa chính, tự động tăng
 
     /**
      * Quan hệ nhiều-một với bảng DonHang
@@ -36,7 +36,7 @@ public class ChiTietDonHang {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "don_hang_id")
-    private DonHang donHang;
+    private DonHang donHang; // Mỗi chi tiết đơn hàng phải gắn với một đơn hàng
 
     /**
      * Quan hệ nhiều-một với bảng Product
@@ -45,17 +45,17 @@ public class ChiTietDonHang {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product product;
+    private Product product; // Mỗi chi tiết đơn hàng phải gắn với một sản phẩm
 
     /**
      * Số lượng sản phẩm trong chi tiết đơn hàng
      */
     @Column(name = "so_luong")
-    private Integer soLuong;
+    private Integer soLuong; // Số lượng sản phẩm, nên kiểm tra không âm và > 0
 
     /**
      * Đơn giá của sản phẩm tại thời điểm đặt hàng
      */
     @Column(name = "don_gia")
-    private Double donGia;
+    private Double donGia; // Đơn giá tại thời điểm đặt hàng, nên kiểm tra không âm
 } 

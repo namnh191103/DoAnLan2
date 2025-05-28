@@ -26,7 +26,7 @@ public class Cart {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id; // Khóa chính, tự động tăng
 
     /**
      * Quan hệ nhiều-một với bảng User
@@ -36,7 +36,7 @@ public class Cart {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "khach_hang_id", nullable = false)
-    private User user;
+    private User user; // Mỗi item trong giỏ hàng phải gắn với một user
 
     /**
      * Quan hệ nhiều-một với bảng Product
@@ -46,12 +46,12 @@ public class Cart {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tac_pham_id", nullable = false)
-    private Product product;
+    private Product product; // Mỗi item trong giỏ hàng phải gắn với một sản phẩm
 
     /**
      * Số lượng sản phẩm trong giỏ hàng
      * Không được phép null
      */
     @Column(name = "so_luong", nullable = false)
-    private Integer soLuong;
+    private Integer soLuong; // Số lượng sản phẩm, nên kiểm tra không âm và > 0
 } 

@@ -2,14 +2,14 @@
 package com.myapp.controller.user;
 
 // Import các thư viện cần thiết
-import com.myapp.dto.UserDTO;
-import com.myapp.service.DonHangUserService;
+import com.myapp.dto.UserDTO; // Đối tượng truyền dữ liệu người dùng
+import com.myapp.service.DonHangUserService; // Service xử lý logic đơn hàng
 import com.myapp.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor; // Annotation tự động tạo constructor với các biến final
+import org.springframework.security.core.Authentication; // Đối tượng xác thực người dùng
+import org.springframework.stereotype.Controller; // Đánh dấu đây là một controller
+import org.springframework.ui.Model; // Đối tượng truyền dữ liệu sang view
+import org.springframework.web.bind.annotation.*; // Import các annotation cho controller
 
 /**
  * Controller xử lý các request liên quan đến đơn hàng của người dùng
@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.*;
  * @RequiredArgsConstructor: tự động tạo constructor với các tham số bắt buộc
  * @RequestMapping("/user/orders"): Tất cả các request trong controller này đều bắt đầu bằng "/user/orders"
  */
-@Controller
-@RequestMapping("/user/orders")
-@RequiredArgsConstructor
+@Controller // Đánh dấu đây là một controller
+@RequestMapping("/user/orders") // Đường dẫn gốc cho các request đơn hàng người dùng
+@RequiredArgsConstructor // Tự động tạo constructor với các biến final
 public class UserOrderController {
     /**
      * Service xử lý logic liên quan đến đơn hàng
      * Được inject thông qua constructor
      */
-    private final DonHangUserService donHangUserService;
+    private final DonHangUserService donHangUserService; // Service xử lý logic đơn hàng
 
     /**
      * Service xử lý logic liên quan đến người dùng

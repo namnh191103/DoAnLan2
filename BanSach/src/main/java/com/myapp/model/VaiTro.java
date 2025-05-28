@@ -2,6 +2,7 @@ package com.myapp.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.io.Serializable;
 
 /**
  * Lớp VaiTro đại diện cho các vai trò trong hệ thống
@@ -13,25 +14,26 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "vai_tro")
-public class VaiTro {
+public class VaiTro implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * ID của vai trò, được tự động tăng
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id; // Khóa chính, tự động tăng
 
     /**
      * Tên của vai trò, không được trùng lặp và không được để trống
      * Ví dụ: ROLE_ADMIN, ROLE_USER, ROLE_STAFF
      */
     @Column(name = "ten_vai_tro", nullable = false, unique = true)
-    private String tenVaiTro;
+    private String tenVaiTro; // Tên vai trò, phải duy nhất, ví dụ: ROLE_ADMIN, ROLE_USER
 
     /**
      * Mô tả chi tiết về vai trò
      * Giải thích chức năng và quyền hạn của vai trò trong hệ thống
      */
     @Column(name = "mo_ta")
-    private String moTa;
+    private String moTa; // Mô tả vai trò, không nên quá dài
 } 

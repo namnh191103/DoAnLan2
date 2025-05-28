@@ -35,10 +35,11 @@
                 <span
                   th:text="${donHang.trangThai}"
                   th:classappend="'badge ' +
-                            (${donHang.trangThai} == 'DA_GIAO' ? 'bg-success' :
-                            (${donHang.trangThai} == 'CHO_XAC_NHAN' ? 'bg-warning text-dark' :
-                            (${donHang.trangThai} == 'DA_HUY' ? 'bg-danger' : 'bg-secondary')))"
-                />
+                        (${donHang.trangThai} == 'DA_GIAO' ? 'bg-success' :
+                        (${donHang.trangThai} == 'CHO_XAC_NHAN' ? 'bg-warning text-dark' :
+                        (${donHang.trangThai} == 'DA_HUY' ? 'bg-danger' : 'bg-secondary')))"
+                >
+                </span>
               </td>
               <td
                 th:text="${#numbers.formatDecimal(donHang.tongThanhToan, 0, 'COMMA', 0, 'POINT') + ' ₫'}"

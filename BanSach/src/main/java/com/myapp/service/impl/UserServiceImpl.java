@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 import java.util.HashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.myapp.service.MailService;
+import java.time.LocalDateTime;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final VaiTroRepository vaiTroRepository;
+    private final MailService mailService;
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
@@ -176,6 +180,44 @@ public class UserServiceImpl implements UserService {
         user.setDaKhoa(false);
         userRepository.save(user);
         log.info("User with id {} unlocked.", id);
+    }
+
+    @Override
+    public void sendPasswordResetOtp(String email) {
+        String normalizedEmail = email.trim().toLowerCase();
+        User user = userRepository.findByEmail(normalizedEmail)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng với email này!"));
+        // Sinh OTP 6 số
+        String otp = String.format("%06d", new Random().nextInt(1000000));
+        user.setMaXacThuc(otp);
+        user.setOtpExpiredAt(LocalDateTime.now().plusMinutes(10)); // OTP có hiệu lực 10 phút
+        userRepository.save(user);
+        // Gửi mail
+        String subject = "Mã OTP đặt lại mật khẩu";
+        String text = "Mã OTP của bạn là: " + otp + "\nMã có hiệu lực trong 10 phút.";
+        mailService.sendSimpleEmail(user.getEmail(), subject, text);
+    }
+
+    @Override
+    public void resetPasswordWithOtp(String email, String otp, String newPassword) {
+        String normalizedEmail = email.trim().toLowerCase();
+        User user = userRepository.findByEmail(normalizedEmail)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng với email này!"));
+        if (user.getMaXacThuc() == null || user.getOtpExpiredAt() == null) {
+            throw new RuntimeException("Bạn chưa yêu cầu OTP hoặc OTP đã hết hạn!");
+        }
+        if (!user.getMaXacThuc().equals(otp)) {
+            throw new RuntimeException("Mã OTP không đúng!");
+        }
+        if (user.getOtpExpiredAt().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Mã OTP đã hết hạn!");
+        }
+        // Đổi mật khẩu
+        user.setMatKhau(passwordEncoder.encode(newPassword));
+        // Xóa OTP sau khi dùng
+        user.setMaXacThuc(null);
+        user.setOtpExpiredAt(null);
+        userRepository.save(user);
     }
 
     private UserDTO convertToDTO(User user) {

@@ -33,4 +33,18 @@ public interface UserService {
      * @param id the ID of the user to unlock
      */
     void unlockUser(Integer id);
+
+    /**
+     * Gửi OTP đặt lại mật khẩu về email người dùng
+     * @param email email người dùng
+     */
+    void sendPasswordResetOtp(String email);
+
+    /**
+     * Đặt lại mật khẩu mới bằng OTP
+     * @param email email người dùng
+     * @param otp mã OTP
+     * @param newPassword mật khẩu mới
+     */
+    void resetPasswordWithOtp(String email, String otp, String newPassword);
 } 

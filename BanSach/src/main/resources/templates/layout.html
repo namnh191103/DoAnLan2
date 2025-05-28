@@ -125,7 +125,7 @@
   </head>
   <body>
     <!-- Navbar cố định -->
-    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="~{fragments/header :: header}"></div>
     <!-- Nội dung động -->
     <div class="main-content">
       <div layout:fragment="content"></div>

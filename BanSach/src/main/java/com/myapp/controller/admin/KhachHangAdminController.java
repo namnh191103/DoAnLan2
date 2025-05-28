@@ -47,23 +47,17 @@ public class KhachHangAdminController {
         UserDTO existingUser = userService.findById(id);
         String currentEmail = securityContext.getAuthentication().getName();
         boolean isSelf = existingUser.getEmail().equalsIgnoreCase(currentEmail);
-        // Không cho phép sửa thông tin cá nhân admin, chỉ cho phép phân quyền
         if (existingUser.getVaiTros() != null && existingUser.getVaiTros().contains("ROLE_ADMIN")) {
-            // Nếu là chính mình thì không cho phép bỏ quyền admin
             if (isSelf) {
                 model.addAttribute("user", existingUser);
                 model.addAttribute("error", "Không được phép sửa thông tin cá nhân hoặc bỏ quyền admin của chính mình!");
                 return "admin/user-edit";
             }
-            // Chỉ xử lý phân quyền
             if (isAdmin == null) {
-                // Bỏ quyền admin
                 userService.removeRoleAdmin(id);
             }
-            // Nếu isAdmin != null thì giữ nguyên quyền admin
             return "redirect:/admin/users";
         }
-        // Nếu là user thường, cho phép cập nhật thông tin và phân quyền
         userService.update(id, userDTO);
         if (isAdmin != null) {
             userService.addRoleAdmin(id);

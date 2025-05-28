@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Controller xử lý các request liên quan đến xác thực người dùng
- * Bao gồm đăng nhập và đăng ký
+ * Bao gồm đăng nhập, đăng ký, quên mật khẩu
  * 
  * Sử dụng annotation @Controller để đánh dấu đây là một Spring MVC Controller
  * @RequiredArgsConstructor: tự động tạo constructor với các tham số bắt buộc
@@ -78,6 +78,57 @@ public class AuthController {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("user", user);
             return "user/register";
+        }
+    }
+
+    /**
+     * Hiển thị form quên mật khẩu
+     */
+    @GetMapping("/forgot-password")
+    public String forgotPasswordPage() {
+        return "user/forgot-password";
+    }
+
+    /**
+     * Xử lý gửi OTP về email
+     */
+    @PostMapping("/forgot-password")
+    public String sendOtp(@RequestParam("email") String email, Model model) {
+        try {
+            userService.sendPasswordResetOtp(email);
+            model.addAttribute("email", email);
+            model.addAttribute("success", "Đã gửi mã OTP về email. Vui lòng kiểm tra hộp thư!");
+            return "user/enter-otp";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "user/forgot-password";
+        }
+    }
+
+    /**
+     * Hiển thị form nhập OTP và mật khẩu mới
+     */
+    @GetMapping("/enter-otp")
+    public String enterOtpPage(@RequestParam("email") String email, Model model) {
+        model.addAttribute("email", email);
+        return "user/enter-otp";
+    }
+
+    /**
+     * Xử lý xác nhận OTP và đổi mật khẩu
+     */
+    @PostMapping("/reset-password")
+    public String resetPasswordWithOtp(@RequestParam("email") String email,
+                                       @RequestParam("otp") String otp,
+                                       @RequestParam("newPassword") String newPassword,
+                                       Model model) {
+        try {
+            userService.resetPasswordWithOtp(email, otp, newPassword);
+            return "redirect:/login?resetSuccess=true";
+        } catch (Exception e) {
+            model.addAttribute("email", email);
+            model.addAttribute("error", e.getMessage());
+            return "user/enter-otp";
         }
     }
 } 

@@ -39,14 +39,14 @@ public class DonHang {
      */
     @ManyToOne
     @JoinColumn(name = "khach_hang_id", nullable = false)
-    private User user;
+    private User user; // Đơn hàng luôn phải gắn với một user, cần kiểm tra user tồn tại khi tạo đơn hàng
 
     /**
      * Thời điểm đặt hàng
      * Không được phép null
      */
     @Column(name = "ngay_dat_hang", nullable = false)
-    private LocalDateTime ngayDatHang;
+    private LocalDateTime ngayDatHang; // Nên set tự động khi tạo đơn hàng mới
 
     /**
      * Thời điểm giao hàng
@@ -69,7 +69,7 @@ public class DonHang {
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "trang_thai", nullable = false)
-    private TrangThaiDonHang trangThai;
+    private TrangThaiDonHang trangThai; // Trường quan trọng, quyết định luồng xử lý đơn hàng
 
     /**
      * Tổng tiền hàng trước khi áp dụng các khoản giảm giá
@@ -77,7 +77,7 @@ public class DonHang {
      * Không được phép null
      */
     @Column(name = "tong_tien", nullable = false, precision = 10, scale = 2)
-    private BigDecimal tongTien;
+    private BigDecimal tongTien; // Tổng tiền hàng, nên kiểm tra không âm
 
     /**
      * Tổng tiền phải thanh toán sau khi áp dụng các khoản giảm giá
@@ -85,7 +85,7 @@ public class DonHang {
      * Không được phép null
      */
     @Column(name = "tong_thanh_toan", nullable = false, precision = 10, scale = 2)
-    private BigDecimal tongThanhToan;
+    private BigDecimal tongThanhToan; // Tổng tiền phải thanh toán, nên kiểm tra không âm
 
     /**
      * Ghi chú thêm về đơn hàng
@@ -99,21 +99,21 @@ public class DonHang {
      * Không được phép null
      */
     @Column(name = "ho_ten", nullable = false)
-    private String hoTen;
+    private String hoTen; // Họ tên người nhận, nên kiểm tra độ dài và ký tự đặc biệt
 
     /**
      * Số điện thoại người nhận hàng
      * Không được phép null
      */
     @Column(name = "so_dien_thoai", nullable = false)
-    private String soDienThoai;
+    private String soDienThoai; // Số điện thoại người nhận, nên kiểm tra định dạng
 
     /**
      * Địa chỉ chi tiết người nhận hàng
      * Không được phép null
      */
     @Column(name = "dia_chi", nullable = false)
-    private String diaChi;
+    private String diaChi; // Địa chỉ nhận hàng, nên kiểm tra không để trống
 
     /**
      * Tỉnh/Thành phố của người nhận hàng
@@ -150,5 +150,5 @@ public class DonHang {
      * orphanRemoval: tự động xóa các chi tiết không còn liên kết với đơn hàng
      */
     @OneToMany(mappedBy = "donHang", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChiTietDonHang> chiTietDonHangs;
+    private List<ChiTietDonHang> chiTietDonHangs; // Danh sách chi tiết sản phẩm, cần kiểm tra không null khi tạo đơn hàng
 } 

@@ -26,30 +26,30 @@ public class SanPham {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // Khóa chính, tự động tăng
 
     /**
      * Tên của sản phẩm
      */
-    private String ten;
+    private String ten; // Tên sản phẩm, nên kiểm tra không để trống
 
     /**
      * Mô tả chi tiết về sản phẩm
      */
-    private String moTa;
+    private String moTa; // Mô tả chi tiết sản phẩm
 
     /**
      * Giá bán của sản phẩm
      */
-    private double gia;
+    private double gia; // Giá bán, nên kiểm tra không âm ở tầng service
 
     /**
      * Số lượng tồn kho của sản phẩm
      */
-    private int soLuong;
+    private int soLuong; // Số lượng tồn kho, nên kiểm tra không âm
 
     /**
      * Đường dẫn đến hình ảnh của sản phẩm
      */
-    private String hinhAnh;
+    private String hinhAnh; // Đường dẫn ảnh sản phẩm, nên kiểm tra hợp lệ nếu sử dụng
 } 

@@ -19,30 +19,18 @@ import java.util.List;
 import com.myapp.model.TrangThaiDonHang;
 
 /**
- * Service xử lý logic liên quan đến đơn hàng
- * 
- * Sử dụng annotation @Service để đánh dấu đây là một Spring Service
- * @RequiredArgsConstructor: tự động tạo constructor với các tham số bắt buộc
+ * Đoạn này nói rằng file này dùng để xử lý các chức năng liên quan đến đơn hàng của người dùng
+ * @Service: Dán nhãn cho biết đây là một dịch vụ
+ * @RequiredArgsConstructor: Tự động tạo hàm khởi tạo với các biến final
  */
 @Service
 @RequiredArgsConstructor
 public class DonHangUserService {
-    /**
-     * Repository xử lý truy vấn database liên quan đến đơn hàng
-     * Được inject thông qua constructor
-     */
+    // Đây là nơi lấy dữ liệu đơn hàng từ nơi lưu trữ
     private final DonHangRepository donHangRepository;
-
-    /**
-     * Repository xử lý truy vấn database liên quan đến giỏ hàng
-     * Được inject thông qua constructor
-     */
+    // Đây là nơi lấy dữ liệu giỏ hàng từ nơi lưu trữ
     private final CartRepository cartRepository;
-
-    /**
-     * Service xử lý logic liên quan đến người dùng
-     * Được inject thông qua constructor
-     */
+    // Đây là nơi xử lý các chức năng liên quan đến người dùng
     private final UserService userService;
 
     /**
@@ -52,7 +40,9 @@ public class DonHangUserService {
      * @return Danh sách đơn hàng của người dùng
      */
     public List<DonHang> getOrdersByUser(UserDTO userDTO) {
+        // Bước 1: Tìm người dùng thật dựa vào email
         User user = userService.findByEmail(userDTO.getEmail()).getUser();
+        // Bước 2: Tìm tất cả đơn hàng của người dùng đó
         return donHangRepository.findByUser(user);
     }
 
@@ -63,6 +53,7 @@ public class DonHangUserService {
      * @return Thông tin đơn hàng hoặc null nếu không tìm thấy
      */
     public DonHang getOrderById(Integer id) {
+        // Nếu tìm thấy thì trả về đơn hàng, không thì trả về null
         return donHangRepository.findById(id).orElse(null);
     }
 
@@ -74,17 +65,23 @@ public class DonHangUserService {
      * @throws Exception Nếu không có quyền hủy hoặc đơn hàng không thể hủy
      */
     public void cancelOrder(Integer orderId, UserDTO userDTO) throws Exception {
+        // Bước 1: Tìm đơn hàng dựa vào mã số
         DonHang donHang = getOrderById(orderId);
+        // Bước 2: Nếu không tìm thấy thì báo lỗi
         if (donHang == null) {
             throw new Exception("Không tìm thấy đơn hàng");
         }
+        // Bước 3: Nếu người dùng không phải chủ đơn hàng thì báo lỗi
         if (!donHang.getUser().getEmail().equals(userDTO.getEmail())) {
             throw new Exception("Bạn không có quyền hủy đơn hàng này");
         }
+        // Bước 4: Nếu đơn hàng không ở trạng thái chờ xác nhận thì không cho hủy
         if (!donHang.getTrangThai().equals(TrangThaiDonHang.CHO_XAC_NHAN)) {
             throw new Exception("Không thể hủy đơn hàng ở trạng thái này");
         }
+        // Bước 5: Đổi trạng thái đơn hàng thành đã hủy
         donHang.setTrangThai(TrangThaiDonHang.DA_HUY);
+        // Bước 6: Lưu lại đơn hàng đã thay đổi
         donHangRepository.save(donHang);
     }
 
@@ -100,43 +97,57 @@ public class DonHangUserService {
      * @return Đơn hàng mới được tạo
      * @throws Exception Nếu có lỗi trong quá trình tạo đơn hàng
      */
-    @Transactional
+    @Transactional // Nếu có lỗi trong quá trình tạo đơn hàng, mọi thay đổi sẽ bị hủy bỏ
     public DonHang createOrder(UserDTO userDTO, String shippingAddress, String phoneNumber, String note, ShippingMethod shippingMethod, PaymentMethod paymentMethod) throws Exception {
+        // Bước 1: Tìm người dùng thật dựa vào email
         User user = userService.findByEmail(userDTO.getEmail()).getUser();
+        // Bước 2: Lấy danh sách sản phẩm trong giỏ hàng của người dùng
         List<Cart> cartItems = cartRepository.findByUserEmail(userDTO.getEmail());
+        // Bước 3: Nếu giỏ hàng trống thì báo lỗi
         if (cartItems.isEmpty()) {
             throw new Exception("Giỏ hàng trống");
         }
+        // Bước 4: Tạo đối tượng đơn hàng mới
         DonHang donHang = new DonHang();
         donHang.setUser(user);
-        donHang.setNgayDatHang(LocalDateTime.now());
-        donHang.setTrangThai(TrangThaiDonHang.CHO_XAC_NHAN);
+        donHang.setNgayDatHang(LocalDateTime.now()); // Lấy thời gian hiện tại
+        donHang.setTrangThai(TrangThaiDonHang.CHO_XAC_NHAN); // Đơn hàng mới luôn ở trạng thái chờ xác nhận
         donHang.setGhiChu(note);
         donHang.setHoTen(user.getHoTen());
         donHang.setSoDienThoai(phoneNumber);
         donHang.setDiaChi(shippingAddress);
-        donHang.setTinhThanh(null);
-        donHang.setQuanHuyen(null);
-        donHang.setPhuongXa(null);
-        donHang.setMaBuuDien(null);
+        donHang.setTinhThanh(null); // Chỗ này cần kiểm tra thêm, chưa rõ lắm
+        donHang.setQuanHuyen(null); // Chỗ này cần kiểm tra thêm, chưa rõ lắm
+        donHang.setPhuongXa(null); // Chỗ này cần kiểm tra thêm, chưa rõ lắm
+        donHang.setMaBuuDien(null); // Chỗ này cần kiểm tra thêm, chưa rõ lắm
+        // Bước 5: Tạo danh sách chi tiết đơn hàng
         List<ChiTietDonHang> chiTietDonHangs = new ArrayList<>();
         BigDecimal tongTien = BigDecimal.ZERO;
+        // Bước 6: Với mỗi sản phẩm trong giỏ hàng, tạo một chi tiết đơn hàng
         for (Cart cartItem : cartItems) {
             ChiTietDonHang chiTiet = new ChiTietDonHang();
             chiTiet.setDonHang(donHang);
             chiTiet.setProduct(cartItem.getProduct());
             chiTiet.setSoLuong(cartItem.getSoLuong());
             chiTiet.setDonGia(cartItem.getProduct().getGiaBan().doubleValue());
+            // Tính tổng tiền
             tongTien = tongTien.add(cartItem.getProduct().getGiaBan().multiply(BigDecimal.valueOf(cartItem.getSoLuong())));
             chiTietDonHangs.add(chiTiet);
         }
+        // Bước 7: Gắn danh sách chi tiết vào đơn hàng
         donHang.setChiTietDonHangs(chiTietDonHangs);
+        // Bước 8: Gắn tổng tiền vào đơn hàng
         donHang.setTongTien(tongTien);
+        // Bước 9: Tính phí giao hàng (nếu có)
         BigDecimal shippingFee = (shippingMethod != null && shippingMethod.getFee() != null) ? shippingMethod.getFee() : BigDecimal.ZERO;
         if (shippingFee.compareTo(BigDecimal.ZERO) < 0) shippingFee = BigDecimal.ZERO;
+        // Bước 10: Gắn tổng tiền phải thanh toán vào đơn hàng
         donHang.setTongThanhToan(tongTien.add(shippingFee));
+        // Bước 11: Lưu đơn hàng vào nơi lưu trữ
         DonHang saved = donHangRepository.save(donHang);
+        // Bước 12: Xóa hết sản phẩm trong giỏ hàng của người dùng
         cartRepository.deleteAll(cartItems);
+        // Bước 13: Trả về đơn hàng vừa tạo
         return saved;
     }
 

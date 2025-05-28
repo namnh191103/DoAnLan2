@@ -75,9 +75,10 @@ public class UserCartController {
      * @param productId ID của sản phẩm cần thêm
      * @param quantity Số lượng sản phẩm
      * @param authentication Thông tin xác thực của người dùng hiện tại
+     * @param model Model để truyền dữ liệu đến view
      * @return 
-     * - Nếu thành công: "success"
-     * - Nếu thất bại: "error: [thông báo lỗi]"
+     * - Nếu thành công: "redirect:/user/cart"
+     * - Nếu thất bại: "redirect:/user/cart?error=[thông báo lỗi]"
      * 
      * URL mapping: "/user/cart/add"
      * Chức năng:
@@ -86,18 +87,19 @@ public class UserCartController {
      * - Thêm sản phẩm vào giỏ hàng với số lượng chỉ định
      */
     @PostMapping("/add")
-    @ResponseBody
     public String addToCart(@RequestParam Integer productId,
                           @RequestParam Integer quantity,
-                          Authentication authentication) {
+                          Authentication authentication,
+                          Model model) {
         try {
             String email = authentication.getName();
             UserDTO userDTO = userService.findByEmail(email);
             ProductDTO productDTO = productService.findById(productId);
             cartService.addToCart(userDTO, productDTO, quantity);
-            return "success";
+            return "redirect:/user/cart";
         } catch (Exception e) {
-            return "error: " + e.getMessage();
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/user/cart?error=" + e.getMessage();
         }
     }
 
